@@ -1,9 +1,11 @@
 #!/bin/sh
 
-basedir=`dirname $0`
+cd `dirname $0`
+
+basedir=`pwd`
 
 function make_link {
-    ln -sv "$basedir/$1" "$HOME/.$1"
+    ln -svf "$basedir/$1" "$HOME/.$1"
 }
 
 make_link "bash_profile"
