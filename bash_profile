@@ -4,3 +4,4 @@ export PATH=$PATH:$ANDROID_SDK_ROOT/tools
 export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
 
 alias tada='afplay /System/Library/Sounds/Glass.aiff'
+alias reset-launchpad='defaults write com.apple.dock ResetLaunchPad -bool true && killall Dock'
