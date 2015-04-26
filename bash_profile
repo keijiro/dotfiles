@@ -1,7 +1,7 @@
-export ANDROID_SDK_ROOT=~/Library/android-sdk-macosx
-export ANDROID_NDK_ROOT=~/Library/android-ndk-r8e
-export PATH=$PATH:$ANDROID_SDK_ROOT/tools
-export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
-
-alias tada='afplay /System/Library/Sounds/Glass.aiff'
-alias reset-launchpad='defaults write com.apple.dock ResetLaunchPad -bool true && killall Dock'
+# Setting the evironment variables for Android SDK.
+if [ `uname` = "Darwin" ]; then
+    export ANDROID_SDK_ROOT=~/Library/android-sdk-macosx
+    export ANDROID_NDK_ROOT=~/Library/android-ndk-r8e
+    export PATH=$PATH:$ANDROID_SDK_ROOT/tools
+    export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
+fi
