@@ -12,3 +12,8 @@ make_link "bash_profile"
 make_link "hgrc"
 make_link "vimrc"
 make_link "vim"
+
+if [ `uname` = "Linux" ]; then
+    make_link "bash_aliases"
+    make_link "fonts.conf"
+fi
