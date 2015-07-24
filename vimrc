@@ -12,3 +12,7 @@ set smarttab
 set smartindent
 set shiftwidth=4
 set tabstop=4
+
+set cc=80
+set background=dark
+set nowrap
