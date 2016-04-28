@@ -3,10 +3,13 @@ username = Keijiro Takahashi <keijiro@unity3d.com>
 
 [extensions]
 largefiles =
-mercurial_keyring =
-progress =
-transplant =
-rebase =
 eol =
+rebase =
+transplant =
+progress =
+purge =
+strip =
+# mercurial_keyring =
 
-[hostfingerprints]
+[diff]
+git = True
