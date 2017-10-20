@@ -1,4 +1,6 @@
-# Setting the evironment variables for Android SDK.
+if [ -f ~/.bashrc ]; then
+    . ~/.bashrc
+fi
 
 if [ `uname` = "Darwin" ]; then
     export ANDROID_SDK_ROOT=~/Library/android-sdk-macosx
