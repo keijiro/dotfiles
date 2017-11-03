@@ -82,8 +82,10 @@ syn keyword shaderFunction UnityPixelSnap
 
 syn keyword shaderCGProgram CGPROGRAM
 syn keyword shaderCGProgram CGINCLUDE
-syn keyword shaderCGProgram HLSLPROGRAM
 syn keyword shaderCGProgram ENDCG
+syn keyword shaderCGProgram HLSLPROGRAM
+syn keyword shaderCGProgram HLSLINCLUDE
+syn keyword shaderCGProgram ENDHLSL
 
 hi def link shaderType          Type
 hi def link shaderStatement     Statement
