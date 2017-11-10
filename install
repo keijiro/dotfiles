@@ -13,6 +13,7 @@ make_link "gitconfig"
 make_link "hgrc"
 make_link "vimrc"
 make_link "vim"
+make_link "tmux.conf"
 
 if [ `uname` = "Linux" ]; then
     make_link "bash_aliases"
