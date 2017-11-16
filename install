@@ -13,6 +13,7 @@ make_dot_link "gitconfig"
 make_dot_link "hgrc"
 make_dot_link "vimrc"
 make_dot_link "vim"
+make_dot_link "tmux.conf"
 
 local_bin="$HOME/.local/bin"
 
