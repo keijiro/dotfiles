@@ -1,0 +1,45 @@
+#!/bin/bash
+
+cd `dirname $0`
+base_dir=`pwd`
+
+# Symbolic links to the dot files
+
+function make_dot_link {
+    dest="$HOME/.$1"
+    [ -e $dest ] || ln -svf "$base_dir/$1" $dest
+}
+
+make_dot_link "bash_profile"
+make_dot_link "gitconfig"
+make_dot_link "hgrc"
+make_dot_link "vimrc"
+make_dot_link "vim"
+make_dot_link "tmux.conf"
+
+# Setup for the local bin directory
+
+local_bin="$HOME/.local/bin"
+
+[ -d $local_bin ] || mkdir $local_bin
+
+function make_bin_link {
+    dest="$local_bin/$1"
+    [ -e $dest ] || ln -svf "$base_dir/$1" $dest
+    chmod a+x $dest
+}
+
+make_bin_link "makegif"
+
+# Symbolic links to the Windows user directories
+
+if grep -q "Microsoft" /proc/version; then
+    username=`whoami`
+    projects_dir="/mnt/c/Users/$username/Documents/Projects"
+
+    [ -d $projects_dir ] || mkdir -v $projects_dir
+
+    [ -e $HOME/Desktop   ] || ln -svf "/mnt/c/Users/$username/Desktop"   $HOME
+    [ -e $HOME/Downloads ] || ln -svf "/mnt/c/Users/$username/Downloads" $HOME
+    [ -e $HOME/Projects  ] || ln -svf $projects_dir $HOME
+fi
