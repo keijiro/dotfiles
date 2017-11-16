@@ -4,16 +4,26 @@ cd `dirname $0`
 
 basedir=`pwd`
 
-function make_link {
+function make_dot_link {
     ln -svf "$basedir/$1" "$HOME/.$1"
 }
 
-make_link "bash_profile"
-make_link "gitconfig"
-make_link "hgrc"
-make_link "vimrc"
-make_link "vim"
+make_dot_link "bash_profile"
+make_dot_link "gitconfig"
+make_dot_link "hgrc"
+make_dot_link "vimrc"
+make_dot_link "vim"
 
-if [ `uname` = "Linux" ]; then
-    make_link "bash_aliases"
+local_bin="$HOME/.local/bin"
+
+function make_bin_link {
+    dest="$local_bin/$1"
+    ln -svf "$basedir/$1" $dest
+    chmod a+x $dest
+}
+
+if ! [ -d $local_bin ]; then
+    mkdir $local_bin
 fi
+
+make_bin_link "makegif"

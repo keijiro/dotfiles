@@ -2,11 +2,14 @@ if [ -f ~/.bashrc ]; then
     . ~/.bashrc
 fi
 
-set -o vi
-
-if [ `uname` = "Darwin" ]; then
-    export ANDROID_SDK_ROOT=~/Library/android-sdk-macosx
-    export ANDROID_NDK_ROOT=~/Library/android-ndk-r8e
-    export PATH=$PATH:$ANDROID_SDK_ROOT/tools
-    export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
+if [ -d ~/.local/bin ]; then
+    export PATH=$PATH:~/.local/bin
 fi
+
+if grep -q Microsoft /proc/version; then
+    alias wffmpeg=/mnt/c/ProgramData/chocolatey/bin/ffmpeg.exe
+    alias wffplay=/mnt/c/ProgramData/chocolatey/bin/ffplay.exe
+fi
+
+export EDITOR=vim
+set -o vi
