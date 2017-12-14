@@ -10,36 +10,47 @@ function make_dot_link {
     [ -e $dest ] || ln -svf "$base_dir/$1" $dest
 }
 
-make_dot_link "bash_profile"
-make_dot_link "gitconfig"
-make_dot_link "hgrc"
-make_dot_link "vimrc"
-make_dot_link "vim"
-make_dot_link "tmux.conf"
+make_dot_link gitconfig
+make_dot_link hgrc
+make_dot_link vimrc
+make_dot_link vim
+make_dot_link tmux.conf
+
+# .bashrc
+
+uname=`uname`
+
+if [ "$uname" == "Linux" ]; then
+    # Use .bash_aliases instead.
+    [ -e ~/.bash_aliases ] || ln -svf "$base_dir/bashrc" ~/.bash_aliases
+elif [ "$uname" == "Darwin" ]; then
+    # macOS doesn't have a default bashrc, so it's okay to use it.
+    make_dot_link bashrc
+fi
 
 # Setup for the local bin directory
 
-local_bin="$HOME/.local/bin"
+local_bin=~/.local/bin
 
-[ -d $local_bin ] || mkdir $local_bin
+[ -d "$local_bin" ] || mkdir -p "$local_bin"
 
 function make_bin_link {
     dest="$local_bin/$1"
-    [ -e $dest ] || ln -svf "$base_dir/$1" $dest
-    chmod a+x $dest
+    [ -e "$dest" ] || ln -svf "$base_dir/$1" "$dest"
+    chmod a+x "$dest"
 }
 
 make_bin_link "makegif"
 
 # Symbolic links to the Windows user directories
 
-if grep -q "Microsoft" /proc/version; then
+if [ "$uname" == "Linux" ] && grep -q "Microsoft" /proc/version; then
     username=`whoami`
     projects_dir="/mnt/c/Users/$username/Documents/Projects"
 
-    [ -d $projects_dir ] || mkdir -v $projects_dir
+    [ -d "$projects_dir" ] || mkdir -v "$projects_dir"
 
-    [ -e $HOME/Desktop   ] || ln -svf "/mnt/c/Users/$username/Desktop"   $HOME
-    [ -e $HOME/Downloads ] || ln -svf "/mnt/c/Users/$username/Downloads" $HOME
-    [ -e $HOME/Projects  ] || ln -svf $projects_dir $HOME
+    [ -e ~/Desktop   ] || ln -svf "/mnt/c/Users/$username/Desktop" ~
+    [ -e ~/Downloads ] || ln -svf "/mnt/c/Users/$username/Downloads" ~
+    [ -e ~/Projects  ] || ln -svf "$projects_dir" ~
 fi
