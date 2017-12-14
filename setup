@@ -24,8 +24,8 @@ if [ "$uname" == "Linux" ]; then
     # Use .bash_aliases instead.
     [ -e ~/.bash_aliases ] || ln -svf "$base_dir/bashrc" ~/.bash_aliases
 elif [ "$uname" == "Darwin" ]; then
-    # macOS doesn't have a default bashrc, so it's okay to use it.
-    make_dot_link bashrc
+    # Use .bash_profile instead.
+    [ -e ~/.bash_profile ] || ln -svf "$base_dir/bashrc" ~/.bash_profile
 fi
 
 # Setup for the local bin directory
