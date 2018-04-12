@@ -1,3 +1,5 @@
 [user]
 	email = keijiro@gmail.com
 	name = Keijiro Takahashi
+[alias]
+	adog = log --all --decorate --oneline --graph
