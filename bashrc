@@ -4,3 +4,5 @@ fi
 
 export EDITOR=vim
 set -o vi
+
+alias ls="ls -F"
