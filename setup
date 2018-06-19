@@ -53,4 +53,5 @@ if [ "$uname" == "Linux" ] && grep -q "Microsoft" /proc/version; then
     [ -e ~/Desktop   ] || ln -svf "/mnt/c/Users/$username/Desktop" ~
     [ -e ~/Downloads ] || ln -svf "/mnt/c/Users/$username/Downloads" ~
     [ -e ~/Projects  ] || ln -svf "$projects_dir" ~
+    [ -e ~/UnityPackages ] || ln -svf "/mnt/c/Users/$username/AppData/Local/Unity/cache/packages/packages.unity.com" ~/UnityPackages
 fi
