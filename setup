@@ -28,20 +28,6 @@ elif [ "$uname" == "Darwin" ]; then
     [ -e ~/.bash_profile ] || ln -svf "$base_dir/bashrc" ~/.bash_profile
 fi
 
-# Setup for the local bin directory
-
-local_bin=~/.local/bin
-
-[ -d "$local_bin" ] || mkdir -p "$local_bin"
-
-function make_bin_link {
-    dest="$local_bin/$1"
-    [ -e "$dest" ] || ln -svf "$base_dir/$1" "$dest"
-    chmod a+x "$dest"
-}
-
-make_bin_link "makegif"
-
 # Symbolic links to the Windows user directories
 
 if [ "$uname" == "Linux" ] && grep -q "Microsoft" /proc/version; then
@@ -53,5 +39,4 @@ if [ "$uname" == "Linux" ] && grep -q "Microsoft" /proc/version; then
     [ -e ~/Desktop   ] || ln -svf "/mnt/c/Users/$username/Desktop" ~
     [ -e ~/Downloads ] || ln -svf "/mnt/c/Users/$username/Downloads" ~
     [ -e ~/Projects  ] || ln -svf "$projects_dir" ~
-    [ -e ~/UnityPackages ] || ln -svf "/mnt/c/Users/$username/AppData/Local/Unity/cache/packages/packages.unity.com" ~/UnityPackages
 fi
