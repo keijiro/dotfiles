@@ -28,6 +28,10 @@ elif [ "$uname" == "Darwin" ]; then
     [ -e ~/.bash_profile ] || ln -svf "$base_dir/bashrc" ~/.bash_profile
 fi
 
+# .zshrc
+
+[ -e ~/.zshrc ] || ln -svf "$base_dir/zshrc" ~/.zshrc
+
 # Symbolic links to the Windows user directories
 
 if [ "$uname" == "Linux" ] && grep -q "Microsoft" /proc/version; then
