@@ -14,5 +14,5 @@ set shiftwidth=4
 set tabstop=4
 
 set cc=80
-set background=light
+set background=dark
 set nowrap
