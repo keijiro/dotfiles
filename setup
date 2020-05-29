@@ -34,8 +34,9 @@ fi
 
 # Symbolic links to the Windows user directories
 
-if [ "$uname" == "Linux" ] && grep -q "Microsoft" /proc/version; then
-    username=`whoami`
+if [ "$uname" == "Linux" ] && grep -i -q "microsoft" /proc/version; then
+    #username=`whoami`
+    username="keiji"
     projects_dir="/mnt/c/Users/$username/Documents/Projects"
 
     [ -d "$projects_dir" ] || mkdir -v "$projects_dir"
