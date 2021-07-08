@@ -16,3 +16,6 @@ set tabstop=4
 set cc=80
 set background=dark
 set nowrap
+
+autocmd Syntax c,cpp,cs setlocal foldmethod=syntax
+autocmd Syntax c,cpp,cs normal zR
