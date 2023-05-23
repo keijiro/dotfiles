@@ -9,8 +9,6 @@ fi
 export EDITOR=vim
 set -o vi
 
-alias ls="ls -F"
-
 if [ `uname` == "Linux" ] && grep -i -q "microsoft" /proc/version; then
     alias open="powershell.exe -Command Start-Process"
 fi
