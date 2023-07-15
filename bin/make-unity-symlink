@@ -1,0 +1,22 @@
+#!/bin/sh
+
+if [ $# -lt 2 ]; then
+  echo "Usage: $0 SOURCE DEST"
+  exit 1
+fi
+
+src=$1
+dst=$2
+
+src_wsl=$(wslpath -w $src)
+dst_wsl=$(wslpath -w $dst)
+
+make_cmd() {
+    echo "New-Item -Target \\$src_wsl\\$1 -Path $dst_wsl\\$1 -Item SymbolicLink"
+}
+
+opt="'-command $(make_cmd "Assets"); $(make_cmd "Packages"); $(make_cmd "ProjectSettings")'"
+
+mkdir $dst
+
+powershell.exe -command start-process powershell -verb runas $opt

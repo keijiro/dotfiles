@@ -1,0 +1,7 @@
+#!/bin/sh
+
+addr=$(hostname -I)
+
+opt="'interface portproxy add v4tov4 listenport=8999 connectport=8999 connectaddres=$addr'"
+
+powershell.exe -command start-process netsh -verb runas $opt

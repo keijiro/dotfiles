@@ -11,4 +11,5 @@ set -o vi
 
 if [ `uname` == "Linux" ] && grep -i -q "microsoft" /proc/version; then
     alias open="powershell.exe -Command Start-Process"
+    export PATH=$PATH:~/.dotfiles/bin
 fi
