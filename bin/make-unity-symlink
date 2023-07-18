@@ -6,7 +6,7 @@ if [ $# -lt 2 ]; then
 fi
 
 src=$1
-dst=$2
+dst=$2/$(basename $src)
 
 src_wsl=$(wslpath -w $src)
 dst_wsl=$(wslpath -w $dst)
