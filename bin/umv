@@ -1,0 +1,32 @@
+#!/bin/bash
+
+cmd="$(basename $0)"
+
+if [ $# -lt 2 ]; then
+  echo "Usage: $cmd SOURCE DEST"
+  echo "   or: $cmd SOURCE... DIRECTORY"
+  exit 1
+fi
+
+dest=${!#-1}
+
+if [ $# -eq 2 ]
+then
+
+  src="$1"
+
+  if [ -d "$dest" ]; then
+    mv "$src" "$src.meta" "$dest"
+  else
+    mv "$src" "$dest"
+    mv "$src.meta" "$dest.meta"
+  fi
+
+else
+
+  for (( i=1; i<$#; i++ )); do
+    mv "${!i}" "${!i}.meta" "$dest"
+  done
+
+fi
+

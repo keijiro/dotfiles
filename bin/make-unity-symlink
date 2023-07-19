@@ -1,7 +1,9 @@
 #!/bin/sh
 
+cmd=$(basename $0)
+
 if [ $# -lt 2 ]; then
-  echo "Usage: $0 SOURCE DEST"
+  echo "Usage: $cmd SOURCE DEST"
   exit 1
 fi
 
