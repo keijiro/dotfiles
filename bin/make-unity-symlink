@@ -10,6 +10,8 @@ fi
 src=$1
 dst=$2/$(basename $src)
 
+mkdir $dst
+
 src_wsl=$(wslpath -w $src)
 dst_wsl=$(wslpath -w $dst)
 
@@ -18,7 +20,5 @@ make_cmd() {
 }
 
 opt="'-command $(make_cmd "Assets"); $(make_cmd "Packages"); $(make_cmd "ProjectSettings")'"
-
-mkdir $dst
 
 powershell.exe -command start-process powershell -verb runas $opt
