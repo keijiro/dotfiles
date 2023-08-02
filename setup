@@ -35,13 +35,6 @@ fi
 # Symbolic links to the Windows user directories
 
 if [ "$uname" == "Linux" ] && grep -i -q "microsoft" /proc/version; then
-    #username=`whoami`
-    username="keiji"
-    projects_dir="/mnt/c/Users/$username/Documents/Projects"
-
-    [ -d "$projects_dir" ] || mkdir -v "$projects_dir"
-
-    [ -e ~/Desktop   ] || ln -svf "/mnt/c/Users/$username/Desktop" ~
-    [ -e ~/Downloads ] || ln -svf "/mnt/c/Users/$username/Downloads" ~
-    [ -e ~/Projects  ] || ln -svf "$projects_dir" ~
+    username=`powershell.exe '$env:UserName' | sed -e 's/[^a-zA-Z0-9]*$//'`
+    [ -e ~/Windows ] || ln -svf "/mnt/c/Users/$username" ~/Windows
 fi
