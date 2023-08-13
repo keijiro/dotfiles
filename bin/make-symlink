@@ -1,0 +1,17 @@
+#!/bin/sh
+
+cmd=$(basename $0)
+
+if [ $# -lt 2 ]; then
+  echo "Usage: $cmd SOURCE DEST"
+  exit 1
+fi
+
+src="$1"
+dst="$2"
+
+src_wsl="$(wslpath -w $src)"
+dst_wsl="$(wslpath -w $dst)\\$(basename $src)"
+
+opt="'-command New-Item -Target $src_wsl -Path $dst_wsl -Item SymbolicLink'"
+powershell.exe -command start-process powershell -verb runas $opt
