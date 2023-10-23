@@ -1,0 +1,5 @@
+#!/bin/sh
+powershell.exe -Command Start-Process wsl.exe -Verb RunAs -ArgumentList '--mount', '\\.\PHYSICALDRIVE2', '--bare'
+powershell.exe -Command Start-Process wsl.exe -Verb RunAs -ArgumentList '--mount', '\\.\PHYSICALDRIVE3', '--bare'
+sudo mount /dev/sdd1 /var/www/html/ssd1
+sudo mount /dev/sde1 /var/www/html/ssd2
