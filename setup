@@ -11,26 +11,21 @@ function make_dot_link {
 }
 
 make_dot_link gitconfig
-make_dot_link hgrc
-make_dot_link vimrc
-make_dot_link vim
-make_dot_link tmux.conf
 
-# .bashrc
+# bash
 
 uname=`uname`
 
 if [ "$uname" == "Linux" ]; then
     # Use .bash_aliases instead.
     [ -e ~/.bash_aliases ] || ln -svf "$base_dir/bashrc" ~/.bash_aliases
-elif [ "$uname" == "Darwin" ]; then
-    # Use .bash_profile instead.
-    [ -e ~/.bash_profile ] || ln -svf "$base_dir/bashrc" ~/.bash_profile
 fi
 
-# .zshrc
+# zsh
 
 [ -e ~/.zshrc ] || ln -svf "$base_dir/zshrc" ~/.zshrc
+[ -d ~/.config ] || mkdir ~/.config
+[ -e ~/.config/starship.toml ] || ln -svf "$base_dir/starship.toml" ~/.config/starship.toml
 
 # Symbolic links to the Windows user directories
 
