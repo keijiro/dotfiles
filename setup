@@ -1,35 +1,26 @@
-#!/bin/bash
+#!/bin/sh
 
-cd `dirname $0`
-base_dir=`pwd`
+uname="$(uname)"
+base_dir=$(cd "$(dirname "$0")" && pwd)
 
-# Symbolic links to the dot files
+# Dot files
 
-function make_dot_link {
-    dest="$HOME/.$1"
-    [ -e $dest ] || ln -svf "$base_dir/$1" $dest
-}
+[ -e ~/.gitconfig ] || ln -svf "$base_dir/gitconfig" ~/.gitconfig
+[ -e ~/.zshrc     ] || ln -svf "$base_dir/zshrc" ~/.zshrc
 
-make_dot_link gitconfig
+# .config files
 
-# bash
-
-uname=`uname`
-
-if [ "$uname" == "Linux" ]; then
-    # Use .bash_aliases instead.
-    [ -e ~/.bash_aliases ] || ln -svf "$base_dir/bashrc" ~/.bash_aliases
-fi
-
-# zsh
-
-[ -e ~/.zshrc ] || ln -svf "$base_dir/zshrc" ~/.zshrc
 [ -d ~/.config ] || mkdir ~/.config
 [ -e ~/.config/starship.toml ] || ln -svf "$base_dir/starship.toml" ~/.config/starship.toml
 
-# Symbolic links to the Windows user directories
+# Linux
+if [ "$uname" == "Linux" ]; then
+    [ -e ~/.bash_aliases ] || ln -svf "$base_dir/bashrc" ~/.bash_aliases
+fi
+
+# Windows (WSL)
 
 if [ "$uname" == "Linux" ] && grep -i -q "microsoft" /proc/version; then
-    username=`powershell.exe '$env:UserName' | sed -e 's/[^a-zA-Z0-9]*$//'`
+    username=$(powershell.exe '$env:UserName' | sed -e 's/[^a-zA-Z0-9]*$//')
     [ -e ~/Windows ] || ln -svf "/mnt/c/Users/$username" ~/Windows
 fi
