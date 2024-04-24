@@ -5,11 +5,13 @@ export PATH="$PATH:~/.dotfiles/bin"
 [ -d ~/.local/bin      ] && export PATH="$PATH:~/.local/bin"
 
 # Antidote initialization
-source ~/.antidote/antidote.zsh
-antidote load
+if [ -d ~/.antidote ]; then
+    source ~/.antidote/antidote.zsh
+    antidote load
+fi
 
 # zsh plugins
-eval "$(starship init zsh)"
+command -v starship >/dev/null 2>&1 && eval "$(starship init zsh)"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Prefer Vim
