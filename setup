@@ -5,22 +5,18 @@ base_dir=$(cd "$(dirname "$0")" && pwd)
 
 # Dot files
 
-[ -e ~/.gitconfig ] || ln -svf "$base_dir/gitconfig" ~/.gitconfig
-[ -e ~/.zshrc     ] || ln -svf "$base_dir/zshrc" ~/.zshrc
+[ -e ~/.gitconfig        ] || ln -svf "$base_dir/gitconfig" ~/.gitconfig
+[ -e ~/.zshrc            ] || ln -svf "$base_dir/zshrc" ~/.zshrc
+[ -e ~/.zsh_plugins.txt ] || ln -svf "$base_dir/zsh_plugins.txt" ~/.zsh_plugins.txt
 
 # .config files
 
-[ -d ~/.config ] || mkdir ~/.config
+[ -d ~/.config               ] || mkdir ~/.config
 [ -e ~/.config/starship.toml ] || ln -svf "$base_dir/starship.toml" ~/.config/starship.toml
-
-# Linux
-if [ "$uname" == "Linux" ]; then
-    [ -e ~/.bash_aliases ] || ln -svf "$base_dir/bashrc" ~/.bash_aliases
-fi
 
 # Windows (WSL)
 
-if [ "$uname" == "Linux" ] && grep -i -q "microsoft" /proc/version; then
+if [ "$uname" = "Linux" ] && grep -i -q "microsoft" /proc/version; then
     username=$(powershell.exe '$env:UserName' | sed -e 's/[^a-zA-Z0-9]*$//')
     [ -e ~/Windows ] || ln -svf "/mnt/c/Users/$username" ~/Windows
 fi
