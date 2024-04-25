@@ -5,8 +5,8 @@ base_dir=$(cd "$(dirname "$0")" && pwd)
 
 # Dot files
 
-[ -e ~/.gitconfig        ] || ln -svf "$base_dir/gitconfig" ~/.gitconfig
-[ -e ~/.zshrc            ] || ln -svf "$base_dir/zshrc" ~/.zshrc
+[ -e ~/.gitconfig       ] || ln -svf "$base_dir/gitconfig" ~/.gitconfig
+[ -e ~/.zshrc           ] || ln -svf "$base_dir/zshrc" ~/.zshrc
 [ -e ~/.zsh_plugins.txt ] || ln -svf "$base_dir/zsh_plugins.txt" ~/.zsh_plugins.txt
 
 # .config files
