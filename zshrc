@@ -20,7 +20,6 @@ command -v starship >/dev/null 2>&1 && eval "$(starship init zsh)"
 # fzf
 if command -v fzf >/dev/null 2>&1; then
     eval "$(fzf --zsh)"
-    echo hoge
 elif [ -f ~/.fzf.zsh ]; then
     source ~/.fzf.zsh
 fi
