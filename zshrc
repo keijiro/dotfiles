@@ -32,6 +32,6 @@ bindkey -v
 alias ls="ls --color -F"
 
 # WSL options
-if [ `uname` = "Linux" ] && grep -i -q "microsoft" /proc/version; then
+if command -v powershell.exe >/dev/null 2>&1; then
     alias open="powershell.exe -Command Start-Process"
 fi
