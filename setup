@@ -1,7 +1,11 @@
 #!/bin/sh
 
-uname="$(uname)"
 base_dir=$(cd "$(dirname "$0")" && pwd)
+
+uname="$(uname)"
+is_macos=$([ $uname = Darwin ] && echo true)
+is_linux=$([ $uname = Linux  ] && echo true)
+is_wsl=$([ $is_linux ] && grep -i -q "microsoft" /proc/version && echo true)
 
 # Dot files
 
@@ -16,7 +20,44 @@ base_dir=$(cd "$(dirname "$0")" && pwd)
 
 # Windows (WSL)
 
-if [ "$uname" = "Linux" ] && grep -i -q "microsoft" /proc/version; then
+install_apt() {
+    if dpkg -l | grep -qw $1; then
+        echo "$package is already installed."
+    else
+        sudo apt install -y $1
+    fi
+}
+
+if [ $is_wsl ]; then
+    install_apt neovim
+    install_apt zsh
+
+    antidote_url="https://github.com/mattmc3/antidote.git"
+    [ -e ~/.antidote ] || git clone --depth=1 "$antidote_url" ~/.antidote
+
+    fzf_url="https://github.com/junegunn/fzf.git"
+    if [ ! -d ~/.fzf ]; then
+        git clone --depth 1 "$fzf_url" ~/.fzf
+        source ~/.fzf/install
+    fi
+
     username=$(powershell.exe '$env:UserName' | sed -e 's/[^a-zA-Z0-9]*$//')
     [ -e ~/Windows ] || ln -svf "/mnt/c/Users/$username" ~/Windows
+fi
+
+# macOS
+
+install_brew() {
+    if brew list $1 &>/dev/null; then
+        echo "$1 is already installed."
+    else
+        brew install $1
+    fi
+}
+
+if [ $is_macos ]; then
+    install_brew antidote
+    install_brew fzf
+    install_brew neovim
+    install_brew starship
 fi
