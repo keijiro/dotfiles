@@ -1,8 +1,8 @@
 # PATH directories
-export PATH="$PATH:~/.dotfiles/bin"
+export PATH="$PATH:$HOME/.dotfiles/bin"
 [ -d /opt/homebrew/bin ] && export PATH="$PATH:/opt/homebrew/bin"
 [ -d /snap/bin         ] && export PATH="$PATH:/snap/bin"
-[ -d ~/.local/bin      ] && export PATH="$PATH:~/.local/bin"
+[ -d ~/.local/bin      ] && export PATH="$PATH:$HOME/.local/bin"
 
 # Antidote initialization
 BREW_ANTIDOTE=/opt/homebrew/opt/antidote/share/antidote/antidote.zsh
