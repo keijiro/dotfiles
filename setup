@@ -22,7 +22,7 @@ is_wsl=$([ $is_linux ] && grep -i -q "microsoft" /proc/version && echo true)
 
 install_apt() {
     if dpkg -l | grep -qw $1; then
-        echo "$package is already installed."
+        echo "$1 is already installed."
     else
         sudo apt install -y $1
     fi
@@ -38,7 +38,7 @@ if [ $is_wsl ]; then
     fzf_url="https://github.com/junegunn/fzf.git"
     if [ ! -d ~/.fzf ]; then
         git clone --depth 1 "$fzf_url" ~/.fzf
-        source ~/.fzf/install
+        ~/.fzf/install --key-bindings --completion --no-update-rc
     fi
 
     username=$(powershell.exe '$env:UserName' | sed -e 's/[^a-zA-Z0-9]*$//')
