@@ -58,6 +58,9 @@ install_brew() {
 if [ $is_macos ]; then
     install_brew antidote
     install_brew fzf
+    install_brew git-lfs
+    install_brew kitty
     install_brew neovim
+    install_brew ripgrep
     install_brew starship
 fi
