@@ -1,2 +1,1 @@
 agkozak/zsh-z
-olets/zsh-abbr
