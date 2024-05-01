@@ -17,6 +17,7 @@ is_wsl=$([ $is_linux ] && grep -i -q "microsoft" /proc/version && echo true)
 
 [ -d ~/.config               ] || mkdir ~/.config
 [ -e ~/.config/starship.toml ] || ln -svf "$base_dir/starship.toml" ~/.config/starship.toml
+[ -e ~/.config/kitty         ] || ln -svf "$base_dir/kitty" ~/.config/kitty
 
 # Windows (WSL)
 
