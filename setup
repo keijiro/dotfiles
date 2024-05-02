@@ -30,11 +30,20 @@ install_apt() {
     fi
 }
 
+install_snap() {
+    if snap list $1 > /dev/null 2>&1; then
+        echo "$1 is already installed."
+    else
+        sudo snap install --classic $1
+    fi
+}
+
 if [ $is_wsl ]; then
     install_apt git-lfs
-    install_apt neovim
     install_apt ripgrep
     install_apt zsh
+
+    install_snap nvim
 
     antidote_url="https://github.com/mattmc3/antidote.git"
     [ -e ~/.antidote ] || git clone --depth=1 "$antidote_url" ~/.antidote
