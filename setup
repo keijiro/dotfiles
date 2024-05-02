@@ -31,7 +31,9 @@ install_apt() {
 }
 
 if [ $is_wsl ]; then
+    install_apt git-lfs
     install_apt neovim
+    install_apt ripgrep
     install_apt zsh
 
     antidote_url="https://github.com/mattmc3/antidote.git"
@@ -41,6 +43,11 @@ if [ $is_wsl ]; then
     if [ ! -d ~/.fzf ]; then
         git clone --depth 1 "$fzf_url" ~/.fzf
         ~/.fzf/install --key-bindings --completion --no-update-rc
+    fi
+
+    starship_url="https://starship.rs/install.sh"
+    if !command -v starship >/dev/null 2>&1; then
+        curl -sS "$starship_url" | sh
     fi
 
     username=$(powershell.exe '$env:UserName' | sed -e 's/[^a-zA-Z0-9]*$//')
