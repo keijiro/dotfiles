@@ -4,6 +4,10 @@ export PATH="$PATH:$HOME/.dotfiles/bin"
 [ -d /snap/bin         ] && export PATH="$PATH:/snap/bin"
 [ -d ~/.local/bin      ] && export PATH="$PATH:$HOME/.local/bin"
 
+# Prefer Vim
+export EDITOR=nvim
+bindkey -v
+
 # Antidote initialization
 BREW_ANTIDOTE=/opt/homebrew/opt/antidote/share/antidote/antidote.zsh
 if [ -d ~/.antidote ]; then
@@ -23,10 +27,6 @@ if command -v fzf >/dev/null 2>&1; then
 elif [ -f ~/.fzf.zsh ]; then
     source ~/.fzf.zsh
 fi
-
-# Prefer Vim
-export EDITOR=nvim
-bindkey -v
 
 # Misc aliasese
 alias ls="ls --color -F"
