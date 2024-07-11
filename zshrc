@@ -31,6 +31,11 @@ fi
 # Misc aliasese
 alias ls="ls --color -F"
 
+# History
+HISTFILE=~/.zsh_history
+HISTSIZE=2000
+SAVEHIST=1000
+
 # WSL options
 if command -v powershell.exe >/dev/null 2>&1; then
     alias open="powershell.exe -Command Start-Process"
