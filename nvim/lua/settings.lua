@@ -12,6 +12,8 @@ cmd[[filetype plugin on]]
 -- Disable comments on pressing Enter
 cmd[[autocmd FileType * setlocal formatoptions-=cro]]
 
+cmd[[autocmd BufRead,BufNewFile *.compute set filetype=hlsl]]
+
 opt.colorcolumn = "80"
 opt.wrap = false
 opt.termguicolors = true
