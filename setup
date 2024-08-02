@@ -55,7 +55,7 @@ if [ $is_wsl ]; then
     fi
 
     starship_url="https://starship.rs/install.sh"
-    if !command -v starship >/dev/null 2>&1; then
+    if [ ! -x "$(command -v starship)" ]; then
         curl -sS "$starship_url" | sh
     fi
 
