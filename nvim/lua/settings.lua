@@ -32,6 +32,7 @@ opt.fixeol = false -- Turn off appending new line in the end of a file
 
 -- Folding {{{
 opt.foldmethod = 'syntax'
+opt.foldlevel = 99
 -- }}}
 
 -- Search {{{
