@@ -61,6 +61,8 @@ if [ $is_wsl ]; then
 
     username=$(powershell.exe '$env:UserName' | sed -e 's/[^a-zA-Z0-9]*$//')
     [ -e ~/Windows ] || ln -svf "/mnt/c/Users/$username" ~/Windows
+
+    sudo usermod -s "$(command -v zsh)" $USER
 fi
 
 # macOS
