@@ -13,6 +13,9 @@ cmd[[filetype plugin on]]
 cmd[[autocmd FileType * setlocal formatoptions-=cro]]
 
 cmd[[autocmd BufRead,BufNewFile *.compute set filetype=hlsl]]
+cmd[[autocmd BufRead,BufNewFile *.uss set filetype=css]]
+cmd[[autocmd BufRead,BufNewFile *.tss set filetype=css]]
+cmd[[autocmd BufRead,BufNewFile *.uxml set filetype=xml]]
 
 opt.colorcolumn = "80"
 opt.wrap = false
