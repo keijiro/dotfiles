@@ -118,6 +118,27 @@ return {
   },
   -- }}}
 
+  -- Codeium {{{
+  {
+    "Exafunction/codeium.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "hrsh7th/nvim-cmp",
+    },
+    config = function()
+      require "extensions.codeium"
+    end
+  },
+  -- }}}
+
+  -- nvim-cmp {{{
+  {
+    "hrsh7th/nvim-cmp",
+    config = function()
+      require "extensions.nvim-cmp"
+    end
+  },
+  -- }}}
 }
 
 -- vim:tabstop=2 shiftwidth=2 expandtab syntax=lua foldmethod=marker foldlevelstart=0 foldlevel=0
