@@ -1,0 +1,78 @@
+#!/bin/sh
+file="input.mp4"
+f=30
+w=640
+h=480
+c=32
+s=4
+t=8
+ffmpeg -y -i $file -filter_complex "[0:v] fps=$f,scale=$w:$h,split [a][b];[a] palettegen=max_colors=$c [p];[b][p] paletteuse=dither=floyd_steinberg" -ss $s -t $t $file.gif
+
+
+#!/bin/sh
+
+# Function to display usage information
+usage() {
+    echo "Usage: $0 -i input_file -w width -h height [ -f fps ] [ -c colors ] [ -s start_time ] [ -t duration ]"
+    echo "  -i  Input file (required)"
+    echo "  -w  Width (required: if only one of width/height is provided, the other will be set to -1)"
+    echo "  -h  Height (required: if only one of width/height is provided, the other will be set to -1)"
+    echo "  -f  Frame rate (default: 30)"
+    echo "  -c  Maximum number of palette colors (default: 255)"
+    echo "  -s  Start time (if not provided, not passed to ffmpeg)"
+    echo "  -t  Duration (if not provided, not passed to ffmpeg)"
+    exit 1
+}
+
+# Default values
+fps=30
+colors=255
+width="-1"
+height="-1"
+start_time=""
+duration=""
+input_file=""
+
+# Parse command-line options
+while getopts "i:f:w:h:c:s:t:" opt; do
+    case "$opt" in
+        i) input_file="$OPTARG" ;;
+        f) fps="$OPTARG" ;;
+        w) width="$OPTARG" ;;
+        h) height="$OPTARG" ;;
+        c) colors="$OPTARG" ;;
+        s) start_time="$OPTARG" ;;
+        t) duration="$OPTARG" ;;
+        *) usage ;;
+    esac
+done
+
+# Check if input file is provided
+if [ -z "$input_file" ]; then
+    echo "Error: Please specify an input file."
+    usage
+fi
+
+# Check if at least one of width or height is provided
+if [ "$width" = "-1" ] && [ "$height" = "-1" ]; then
+    echo "Error: At least one of width or height must be specified."
+    usage
+fi
+
+# Generate output file name by removing the input file extension and appending .gif
+output_file="${input_file%.*}.gif"
+
+# Build ffmpeg options for start time and duration if provided
+time_opts=""
+if [ -n "$start_time" ]; then
+    time_opts="$time_opts -ss $start_time"
+fi
+if [ -n "$duration" ]; then
+    time_opts="$time_opts -t $duration"
+fi
+
+# Create the ffmpeg filter_complex string
+filter="[0:v] fps=$fps,scale=$width:$height,split [a][b];[a] palettegen=max_colors=$colors [p];[b][p] paletteuse=dither=floyd_steinberg"
+
+# Execute ffmpeg
+ffmpeg -y -i "$input_file" $time_opts -filter_complex "$filter" "$output_file"
