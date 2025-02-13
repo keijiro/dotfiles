@@ -1,7 +1,7 @@
 local cmp = require('cmp')
 cmp.setup({
    mapping = {
-    ['<C-S-Space>'] = cmp.mapping.complete(),
+    ['<C-space>'] = cmp.mapping.complete(),
     ['<C-p>'] = cmp.mapping.select_prev_item(),
     ['<C-n>'] = cmp.mapping.select_next_item(),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
