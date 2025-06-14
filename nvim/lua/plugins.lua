@@ -33,10 +33,6 @@ return {
   },
   -- }}}
 
-  -- Floaterm {{{
-  { "voldikss/vim-floaterm" },
-  -- }}}
-
   -- Neo Tree {{{
   {
     "nvim-neo-tree/neo-tree.nvim",
@@ -98,15 +94,6 @@ return {
   },
   -- }}}
 
-  -- Markdown Preview {{{
-  {
-    "iamcco/markdown-preview.nvim",
-    cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-    ft = { "markdown" },
-    build = function() vim.fn["mkdp#util#install"]() end
-  },
-  -- }}}
-
   -- Theme: Catppuccin {{{
   {
     "catppuccin/nvim",
@@ -118,27 +105,11 @@ return {
   },
   -- }}}
 
-  -- Windsurf {{{
+  -- Copilot {{{
   {
-    "Exafunction/windsurf.nvim",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "hrsh7th/nvim-cmp",
-    },
-    config = function()
-      require "extensions.windsurf"
-    end
+    "github/copilot.vim",
+    lazy=false,
   },
-  -- }}}
-
-  -- nvim-cmp {{{
-  {
-    "hrsh7th/nvim-cmp",
-    config = function()
-      require "extensions.nvim-cmp"
-    end
-  },
-  -- }}}
 }
 
 -- vim:tabstop=2 shiftwidth=2 expandtab syntax=lua foldmethod=marker foldlevelstart=0 foldlevel=0
