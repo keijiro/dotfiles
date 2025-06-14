@@ -110,6 +110,21 @@ return {
     "github/copilot.vim",
     lazy=false,
   },
+  -- }}}
+
+  -- Copilot Chat {{{
+  {
+    "CopilotC-Nvim/CopilotChat.nvim",
+    dependencies = {
+      { "github/copilot.vim" },
+      { "nvim-lua/plenary.nvim", branch = "master" },
+    },
+    build = "make tiktoken",
+    config = function ()
+      require "extensions.CopilotChat"
+    end
+  },
+  -- }}}
 }
 
 -- vim:tabstop=2 shiftwidth=2 expandtab syntax=lua foldmethod=marker foldlevelstart=0 foldlevel=0

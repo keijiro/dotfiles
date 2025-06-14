@@ -1,0 +1,3 @@
+require("CopilotChat").setup({
+})
+
