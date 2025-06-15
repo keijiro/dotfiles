@@ -107,8 +107,12 @@ return {
 
   -- Copilot {{{
   {
-    "github/copilot.vim",
-    lazy=false,
+    "zbirenbaum/copilot.lua",
+    cmd = "Copilot",
+    event = "InsertEnter",
+    config = function ()
+      require "extensions.copilot"
+    end,
   },
   -- }}}
 
@@ -116,7 +120,7 @@ return {
   {
     "CopilotC-Nvim/CopilotChat.nvim",
     dependencies = {
-      { "github/copilot.vim" },
+      { "zbirenbaum/copilot.lua" },
       { "nvim-lua/plenary.nvim", branch = "master" },
     },
     build = "make tiktoken",
