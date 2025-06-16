@@ -7,4 +7,8 @@ require("copilot").setup({
       prev = "<D-[>",
     },
   },
+  filetypes = {
+    cs = true,
+    ["*"] = false,
+  }
 })
