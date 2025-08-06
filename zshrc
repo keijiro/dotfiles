@@ -30,6 +30,7 @@ fi
 
 # Misc aliasese
 alias ls="ls --color -F"
+alias claude-yolo="claude --continue --dangerously-skip-permissions"
 
 # History
 HISTFILE=~/.zsh_history
