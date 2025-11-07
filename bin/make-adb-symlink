@@ -1,0 +1,9 @@
+#!/bin/sh
+
+EDITOR_BASE="/Applications/Unity/Hub/Editor"
+TOOLS_RELPATH="PlaybackEngines/AndroidPlayer/SDK/platform-tools"
+
+LATEST_EDITOR=$(ls "$EDITOR_BASE" | sort -V | tail -n 1)
+BIN_DIR=$(cd "$(dirname "$0")" && pwd)
+
+ln -sf "$EDITOR_BASE"/"$LATEST_EDITOR"/"$TOOLS_RELPATH"/adb "$BIN_DIR"
