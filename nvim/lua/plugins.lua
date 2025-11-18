@@ -53,6 +53,7 @@ return {
     tag = '0.1.4',
     lazy = false,
     dependencies = {
+      'nvim-telescope/telescope-ui-select.nvim',
       "nvim-lua/plenary.nvim",
       "ahmedkhalf/project.nvim",
     },
@@ -120,8 +121,8 @@ return {
   {
     "CopilotC-Nvim/CopilotChat.nvim",
     dependencies = {
-      { "zbirenbaum/copilot.lua" },
-      { "nvim-lua/plenary.nvim", branch = "master" },
+      "zbirenbaum/copilot.lua",
+      "nvim-lua/plenary.nvim",
     },
     build = "make tiktoken",
     config = function ()
