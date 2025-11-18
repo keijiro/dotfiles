@@ -1,0 +1,2 @@
+require("floaterm").setup{
+}
