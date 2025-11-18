@@ -4,5 +4,14 @@
   See: https://github.com/nvim-telescope/telescope.nvim
 ]]
 local telescope = require("telescope")
-telescope.setup()
 
+telescope.setup{
+  extensions = {
+    ["ui-select"] = {
+      require("telescope.themes").get_dropdown {
+      }
+    }
+  }
+}
+
+telescope.load_extension("ui-select")

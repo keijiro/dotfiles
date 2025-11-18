@@ -6,16 +6,29 @@
 
 require "helpers/globals"
 
+local autocmd = vim.api.nvim_create_autocmd
+local augroup = vim.api.nvim_create_augroup
+
 -- Set associating between turned on plugins and filetype
 cmd[[filetype plugin on]]
 
 -- Disable comments on pressing Enter
-cmd[[autocmd FileType * setlocal formatoptions-=cro]]
+local general_group = augroup("dotfiles_general", { clear = true })
+autocmd("FileType", {
+  group = general_group,
+  callback = function()
+    vim.opt_local.formatoptions = vim.opt_local.formatoptions - { "c", "r", "o" }
+  end,
+})
 
-cmd[[autocmd BufRead,BufNewFile *.compute set filetype=hlsl]]
-cmd[[autocmd BufRead,BufNewFile *.uss set filetype=css]]
-cmd[[autocmd BufRead,BufNewFile *.tss set filetype=css]]
-cmd[[autocmd BufRead,BufNewFile *.uxml set filetype=xml]]
+vim.filetype.add({
+  extension = {
+    compute = "hlsl",
+    uss = "css",
+    tss = "css",
+    uxml = "xml",
+  },
+})
 
 opt.colorcolumn = "80"
 opt.wrap = false
@@ -24,7 +37,7 @@ opt.termguicolors = true
 -- Tabs {{{
 opt.expandtab = true                -- Use spaces by default
 opt.shiftwidth = 4                  -- Set amount of space characters, when we press "<" or ">"
-opt.tabstop = 4                     -- 1 tab equal 2 spaces
+opt.tabstop = 4                     -- Keep tab characters aligned to 4 spaces
 opt.smartindent = true              -- Turn on smart indentation. See in the docs for more info
 -- }}}
 

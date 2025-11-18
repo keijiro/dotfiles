@@ -17,7 +17,7 @@ require'nvim-treesitter.configs'.setup {
   -- Install all parsers synchronously
   sync_install = false,
 
-  -- Подсветка
+  -- Highlighting
   highlight = {
     -- Enabling highlight for all files
     enable = true,
