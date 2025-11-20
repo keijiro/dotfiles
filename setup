@@ -20,7 +20,7 @@ is_wsl=$([ $is_linux ] && grep -i -q "microsoft" /proc/version && echo true)
 [ -e ~/.config/nvim          ] || ln -svf "$base_dir/nvim" ~/.config/nvim
 [ -e ~/.config/starship.toml ] || ln -svf "$base_dir/starship.toml" ~/.config/starship.toml
 
-# Windows (WSL)
+# Ubuntu (including WSL)
 
 install_apt() {
     if dpkg -l | grep -qw $1; then
@@ -30,20 +30,25 @@ install_apt() {
     fi
 }
 
-install_snap() {
-    if snap list $1 > /dev/null 2>&1; then
-        echo "$1 is already installed."
-    else
-        sudo snap install --classic $1
+install_neovim_appimage() {
+    if command -v nvim >/dev/null 2>&1; then
+        echo "neovim is already installed."
+        return
     fi
+
+    nvim_url="https://github.com/neovim/neovim/releases/download/stable/nvim.appimage"
+    tmp_file=$(mktemp /tmp/nvim.appimage.XXXXXX)
+    curl -L "$nvim_url" -o "$tmp_file"
+    chmod +x "$tmp_file"
+    sudo mv "$tmp_file" /usr/local/bin/nvim
 }
 
-if [ $is_wsl ]; then
+if [ $is_linux ]; then
     install_apt git-lfs
     install_apt ripgrep
     install_apt zsh
 
-    install_snap nvim
+    install_neovim_appimage
 
     antidote_url="https://github.com/mattmc3/antidote.git"
     [ -e ~/.antidote ] || git clone --depth=1 "$antidote_url" ~/.antidote
@@ -59,10 +64,12 @@ if [ $is_wsl ]; then
         curl -sS "$starship_url" | sh
     fi
 
-    username=$(powershell.exe '$env:UserName' | sed -e 's/[^a-zA-Z0-9]*$//')
-    [ -e ~/Windows ] || ln -svf "/mnt/c/Users/$username" ~/Windows
+    chsh -s "$(command -v zsh)"
 
-    sudo usermod -s "$(command -v zsh)" $USER
+    if [ $is_wsl ]; then
+        username=$(powershell.exe '$env:UserName' | sed -e 's/[^a-zA-Z0-9]*$//')
+        [ -e ~/Windows ] || ln -svf "/mnt/c/Users/$username" ~/Windows
+    fi
 fi
 
 # macOS
