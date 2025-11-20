@@ -3,6 +3,7 @@ export PATH="$PATH:$HOME/.dotfiles/bin"
 [ -d /opt/homebrew/bin ] && export PATH="$PATH:/opt/homebrew/bin"
 [ -d /snap/bin         ] && export PATH="$PATH:/snap/bin"
 [ -d ~/.local/bin      ] && export PATH="$PATH:$HOME/.local/bin"
+source "$HOME/.dotfiles/unity-android.zsh"
 
 # Prefer Vim
 export EDITOR=nvim
