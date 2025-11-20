@@ -36,7 +36,7 @@ install_neovim_appimage() {
         return
     fi
 
-    nvim_url="https://github.com/neovim/neovim/releases/download/stable/nvim.appimage"
+    nvim_url="https://github.com/neovim/neovim/releases/download/stable/nvim-linux-x86_64.appimage"
     tmp_file=$(mktemp /tmp/nvim.appimage.XXXXXX)
     curl -L "$nvim_url" -o "$tmp_file"
     chmod +x "$tmp_file"
@@ -44,6 +44,7 @@ install_neovim_appimage() {
 }
 
 if [ $is_linux ]; then
+    install_apt curl
     install_apt git-lfs
     install_apt ripgrep
     install_apt zsh
