@@ -65,7 +65,10 @@ if [ $is_linux ]; then
         curl -sS "$starship_url" | sh
     fi
 
-    chsh -s "$(command -v zsh)"
+    zsh_path=$(command -v zsh)
+    if [ -n "$zsh_path" ] && [ "$SHELL" != "$zsh_path" ]; then
+        chsh -s "$zsh_path"
+    fi
 
     if [ $is_wsl ]; then
         username=$(powershell.exe '$env:UserName' | sed -e 's/[^a-zA-Z0-9]*$//')
