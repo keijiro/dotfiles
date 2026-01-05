@@ -3,6 +3,11 @@ require "helpers/keyboard"
 
 g.mapleader = ' '                                                                 -- Use Space, like key for alternative hotkeys
 
+-- Buffers {{{
+nm('<tab>', ':bn<CR>')
+nm('<s-tab>', ':bp<CR>')
+-- }}}
+
 -- Terminal Mode {{{
 vim.cmd("tnoremap <Esc> <C-\\><C-n>")
 -- }}}
