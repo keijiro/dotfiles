@@ -32,6 +32,7 @@ fi
 # Misc aliasese
 alias ls="ls --color -F"
 alias claude-yolo="claude --continue --dangerously-skip-permissions"
+alias u='HUB_DISABLE_DETACHED=1 unity'
 
 # History
 HISTFILE=~/.zsh_history
@@ -42,3 +43,7 @@ SAVEHIST=1000
 if command -v powershell.exe >/dev/null 2>&1; then
     alias open="powershell.exe -Command Start-Process"
 fi
+
+# Unity CLI
+. "/Users/keijiro/.unity/env"
+export PATH="/Users/keijiro/.upm/bin:$PATH"
