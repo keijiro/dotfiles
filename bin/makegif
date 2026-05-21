@@ -1,15 +1,4 @@
 #!/bin/sh
-file="input.mp4"
-f=30
-w=640
-h=480
-c=32
-s=4
-t=8
-ffmpeg -y -i $file -filter_complex "[0:v] fps=$f,scale=$w:$h,split [a][b];[a] palettegen=max_colors=$c [p];[b][p] paletteuse=dither=floyd_steinberg" -ss $s -t $t $file.gif
-
-
-#!/bin/sh
 
 # Function to display usage information
 usage() {

@@ -45,5 +45,5 @@ if command -v powershell.exe >/dev/null 2>&1; then
 fi
 
 # Unity CLI
-. "/Users/keijiro/.unity/env"
-export PATH="/Users/keijiro/.upm/bin:$PATH"
+[ -f "$HOME/.unity/env" ] && . "$HOME/.unity/env"
+[ -d "$HOME/.upm/bin" ] && export PATH="$HOME/.upm/bin:$PATH"
