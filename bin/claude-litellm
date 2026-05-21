@@ -2,7 +2,8 @@
 set -eu
 
 keychain_value() {
-    security find-generic-password -a "$USER" -s "$1" -w 2>/dev/null || {
+    security find-generic-password -a "$USER" -s "$1" -w 2>/dev/null ||
+    security find-generic-password -s "$1" -w 2>/dev/null || {
         echo "Missing Keychain item: $1" >&2
         exit 1
     }

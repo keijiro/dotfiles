@@ -1,0 +1,22 @@
+#!/bin/sh
+set -eu
+
+keychain_value() {
+    security find-generic-password -a "$USER" -s "$1" -w 2>/dev/null ||
+    security find-generic-password -s "$1" -w 2>/dev/null || {
+        echo "Missing Keychain item: $1" >&2
+        exit 1
+    }
+}
+
+base_url="$(keychain_value LITELLM_BASE_URL)"
+export OPENAI_BASE_URL="$base_url"
+export OPENAI_API_KEY="$(keychain_value LITELLM_AUTH_TOKEN)"
+
+exec codex \
+    -c 'model_provider="litellm"' \
+    -c 'model_providers.litellm.name="LiteLLM"' \
+    -c "model_providers.litellm.base_url=\"$base_url\"" \
+    -c 'model_providers.litellm.env_key="OPENAI_API_KEY"' \
+    -c 'model_providers.litellm.wire_api="responses"' \
+    "$@"
