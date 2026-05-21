@@ -31,7 +31,6 @@ fi
 
 # Misc aliasese
 alias ls="ls --color -F"
-alias claude-yolo="claude --continue --dangerously-skip-permissions"
 alias u='HUB_DISABLE_DETACHED=1 unity'
 
 # History
