@@ -31,7 +31,6 @@ fi
 
 # Misc aliasese
 alias ls="ls --color -F"
-alias u='HUB_DISABLE_DETACHED=1 unity'
 
 # History
 HISTFILE=~/.zsh_history
