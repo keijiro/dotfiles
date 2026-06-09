@@ -117,20 +117,6 @@ return {
   },
   -- }}}
 
-  -- Copilot Chat {{{
-  {
-    "CopilotC-Nvim/CopilotChat.nvim",
-    dependencies = {
-      "zbirenbaum/copilot.lua",
-      "nvim-lua/plenary.nvim",
-    },
-    build = "make tiktoken",
-    config = function ()
-      require "extensions.CopilotChat"
-    end
-  },
-  -- }}}
-
   -- Floaterm {{{
   {
     "nvzone/floaterm",
