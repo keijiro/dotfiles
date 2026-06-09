@@ -3,7 +3,7 @@
   Description: Configuration of tree-sitter
   See: https://github.com/tree-sitter/tree-sitter
 ]]
-require'nvim-treesitter.configs'.setup {
+require'nvim-treesitter'.setup {
 
   -- Needed parsers
   ensure_installed = {
