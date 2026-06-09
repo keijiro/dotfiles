@@ -8,6 +8,7 @@ $directory\
 [](fg:#eac54f bg:#e44729)\
 $git_branch\
 $git_status\
+${custom.jj}\
 [ ](fg:#e44729)\
 """
 
@@ -46,6 +47,14 @@ disabled = false
 style = "fg:#ffffff bg:#e44729"
 format = '[$all_status$ahead_behind ]($style)'
 disabled = false
+
+[custom.jj]
+when = "command -v jj-starship >/dev/null 2>&1 && jj root >/dev/null 2>&1"
+command = "jj-starship --no-jj-prefix --no-jj-id --no-color"
+ignore_timeout = true
+symbol = "󱗆"
+style = "fg:#ffffff bg:#e44729"
+format = '[ $symbol $output ]($style)'
 
 # Start languages and tools #
 

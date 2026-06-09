@@ -90,8 +90,12 @@ if [ $is_macos ]; then
     install_brew antidote
     install_brew fzf
     install_brew git-lfs
+    install_brew jj
     install_brew kitty
     install_brew neovim
     install_brew ripgrep
     install_brew starship
+
+    brew tap dmmulroy/tap
+    install_brew jj-starship
 fi
