@@ -32,4 +32,8 @@ nm('<leader>a', '<cmd>Telescope<CR>')                                           
 nm('<leader>v', '<cmd>NeoTreeFocusToggle<CR>')                                        -- Toggle file explorer
 -- }}}
 
+-- Prose Mode {{{
+nm('<leader>z', '<cmd>ProseMode<CR>')                                            -- Toggle prose mode (wrap + visual-line + 80col centering)
+-- }}}
+
 -- vim:tabstop=2 shiftwidth=2 expandtab syntax=lua foldmethod=marker foldlevelstart=0 foldlevel=0
