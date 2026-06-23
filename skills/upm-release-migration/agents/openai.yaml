@@ -1,0 +1,4 @@
+interface:
+  display_name: "UPM Release Migration"
+  short_description: "Migrate Unity UPM repos to the new workflow."
+  default_prompt: "Use $upm-release-migration to migrate a Unity UPM repository to the current release workflow."

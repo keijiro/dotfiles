@@ -1,0 +1,4 @@
+interface:
+  display_name: "UPM Release Workflow"
+  short_description: "Maintain, pack, and release Unity UPM packages."
+  default_prompt: "Use $upm-release-workflow to update changelogs, pack with upm, or prepare a Unity UPM package release."
