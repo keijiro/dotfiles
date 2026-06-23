@@ -1,0 +1,37 @@
+#!/bin/sh
+
+set -eu
+
+cmd=$(basename "$0")
+
+if [ $# -gt 1 ]; then
+  echo "Usage: $cmd [UNITY_PROJECT_DIR]"
+  exit 1
+fi
+
+base_dir=$(cd "$(dirname "$0")/.." && pwd)
+target_dir=${1:-.}
+
+mkdir -p "$target_dir/.claude"
+mkdir -p "$target_dir/.codex"
+
+cp "$base_dir/agents/UNITY.md" "$target_dir/.claude/CLAUDE.md"
+cp "$base_dir/agents/UNITY.md" "$target_dir/AGENTS.md"
+cp "$base_dir/agents/codex-config.toml" "$target_dir/.codex/config.toml"
+cp "$base_dir/agents/mcp.json" "$target_dir/.mcp.json"
+
+gitignore="$target_dir/.gitignore"
+touch "$gitignore"
+
+add_gitignore_entry() {
+  entry="$1"
+
+  if ! grep -Fxq "$entry" "$gitignore"; then
+    printf '%s\n' "$entry" >> "$gitignore"
+  fi
+}
+
+add_gitignore_entry ".claude/CLAUDE.md"
+add_gitignore_entry ".codex/config.toml"
+add_gitignore_entry ".mcp.json"
+add_gitignore_entry "AGENTS.md"
