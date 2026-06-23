@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "unity-mcp": {
+      "type": "stdio",
+      "command": "/Users/keijiro/.unity/relay/relay_mac_arm64.app/Contents/MacOS/relay_mac_arm64",
+      "args": [
+        "--mcp"
+      ],
+      "env": {}
+    }
+  }
+}
