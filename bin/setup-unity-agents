@@ -15,8 +15,6 @@ target_dir=${1:-.}
 mkdir -p "$target_dir/.claude"
 mkdir -p "$target_dir/.codex"
 
-cp "$base_dir/agents/UNITY.md" "$target_dir/.claude/CLAUDE.md"
-cp "$base_dir/agents/UNITY.md" "$target_dir/AGENTS.md"
 cp "$base_dir/agents/codex-config.toml" "$target_dir/.codex/config.toml"
 cp "$base_dir/agents/mcp.json" "$target_dir/.mcp.json"
 
@@ -31,7 +29,5 @@ add_gitignore_entry() {
   fi
 }
 
-add_gitignore_entry ".claude/CLAUDE.md"
-add_gitignore_entry ".codex/config.toml"
-add_gitignore_entry ".mcp.json"
-add_gitignore_entry "AGENTS.md"
+add_gitignore_entry "/.codex/config.toml"
+add_gitignore_entry "/.mcp.json"
