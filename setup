@@ -10,6 +10,7 @@ is_wsl=$([ $is_linux ] && grep -i -q "microsoft" /proc/version && echo true)
 # Dot files
 
 [ -e ~/.gitconfig       ] || ln -svf "$base_dir/gitconfig" ~/.gitconfig
+[ -e ~/.ssh/config      ] || ln -svf "$base_dir/sshconfig" ~/.ssh/config
 [ -e ~/.zshrc           ] || ln -svf "$base_dir/zshrc" ~/.zshrc
 [ -e ~/.zsh_plugins.txt ] || ln -svf "$base_dir/zsh_plugins.txt" ~/.zsh_plugins.txt
 
