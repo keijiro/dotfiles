@@ -152,7 +152,16 @@ jj squash
 
 ### Splitting Commits
 
-**Warning**: `jj split` is interactive and will hang in agent environments. To divide a commit, use `jj restore` to move changes out, then create separate commits manually.
+Use `jj split` with explicit filesets to split non-interactively — **do not** use `jj split` without arguments or with `--interactive`/`-i`, as that opens a diff editor and will hang in agent environments.
+
+```bash
+# Split specific files into a new child commit
+jj split path/to/file1 path/to/file2 -m "Description for the split-out commit"
+
+# The selected files go into a new commit; remaining changes stay in the original
+```
+
+The default behaviour places selected changes in a new **child** commit. Use `--parallel` to make them siblings instead.
 
 ### Absorbing Changes
 
@@ -393,6 +402,7 @@ jj st
 | New commit | `jj new -m "message"` (use `jj st` first; skip if `@` is empty) |
 | Edit commit | `jj edit <id>` |
 | Squash to parent | `jj squash` |
+| Split commit | `jj split <files> -m "message"` |
 | Auto-distribute | `jj absorb` |
 | Rebase | `jj rebase -d <destination>` |
 | Abandon commit | `jj abandon <id>` |
