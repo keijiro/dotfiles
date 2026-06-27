@@ -10,7 +10,6 @@ is_wsl=$([ $is_linux ] && grep -i -q "microsoft" /proc/version && echo true)
 # Dot files
 
 [ -e ~/.gitconfig       ] || ln -svf "$base_dir/gitconfig" ~/.gitconfig
-[ -e ~/.ssh/config      ] || ln -svf "$base_dir/sshconfig" ~/.ssh/config
 [ -e ~/.zshrc           ] || ln -svf "$base_dir/zshrc" ~/.zshrc
 [ -e ~/.zsh_plugins.txt ] || ln -svf "$base_dir/zsh_plugins.txt" ~/.zsh_plugins.txt
 
@@ -20,6 +19,11 @@ is_wsl=$([ $is_linux ] && grep -i -q "microsoft" /proc/version && echo true)
 [ -e ~/.config/kitty         ] || ln -svf "$base_dir/kitty" ~/.config/kitty
 [ -e ~/.config/nvim          ] || ln -svf "$base_dir/nvim" ~/.config/nvim
 [ -e ~/.config/starship.toml ] || ln -svf "$base_dir/starship.toml" ~/.config/starship.toml
+
+# other per-app config files
+
+[ -d ~/.ssh    ] && [ -e ~/.ssh/config       ] || ln -svf "$base_dir/sshconfig" ~/.ssh/config
+[ -d ~/.claude ] && [ -e ~/.claude/CLAUDE.md ] || ln -svf "$base_dir/CLAUDE.md" ~/.claude/CLAUDE.md
 
 # Ubuntu (including WSL)
 
