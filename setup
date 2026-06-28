@@ -23,7 +23,6 @@ is_wsl=$([ $is_linux ] && grep -i -q "microsoft" /proc/version && echo true)
 # other per-app config files
 
 [ -d ~/.ssh    ] && [ -e ~/.ssh/config       ] || ln -svf "$base_dir/sshconfig" ~/.ssh/config
-[ -d ~/.claude ] && [ -e ~/.claude/CLAUDE.md ] || ln -svf "$base_dir/CLAUDE.md" ~/.claude/CLAUDE.md
 
 # Ubuntu (including WSL)
 
