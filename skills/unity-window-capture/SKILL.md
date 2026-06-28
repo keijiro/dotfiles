@@ -1,13 +1,38 @@
 ---
 name: unity-window-capture
 description: Capture a specific Unity Editor window (including floating windows) as an image, resize it for token efficiency, and visually evaluate it. Use when asked to check, verify, or diagnose the visual state of any Unity Editor window.
-allowed-tools: Bash, Read
+allowed-tools: Bash, Read, Agent
 ---
 
 # Unity Window Capture
 
 Captures a specific Unity Editor window by OS window ID, strips the shadow, halves
 the resolution, and reads the result for visual evaluation.
+
+**Always delegate the capture + evaluation to a fork agent** so that the image
+data and tool noise never land in the main conversation context. Only the fork's
+text summary is returned.
+
+## How to invoke (as the parent)
+
+Spawn a fork with a prompt that includes all required context — window title,
+what to look for, and the scratchpad path. Example:
+
+```
+Agent(
+  subagent_type: "fork",
+  description: "Capture and evaluate Unity window",
+  prompt: "Capture the Unity Editor window titled 'Audio Tailor' and check
+           whether the waveform is rendered correctly (green bars filling the
+           waveform area, no blank region). Save captures to <scratchpad_path>.
+           Follow the unity-window-capture skill instructions for the capture
+           steps, then report your findings in 2–3 sentences."
+)
+```
+
+The fork inherits your full context (including this skill), so you do not need
+to repeat the step-by-step instructions in the prompt — just describe the goal
+and the evaluation criteria.
 
 ## Prerequisites
 
@@ -49,8 +74,8 @@ the newly added entry.
 
 ```bash
 WID=<window_id>
-OUT=/tmp/unity_capture.png
-SMALL=/tmp/unity_capture_small.png
+OUT=<scratchpad_path>/unity_capture.png
+SMALL=<scratchpad_path>/unity_capture_small.png
 
 # Capture without drop shadow (-o flag)
 screencapture -l $WID -o $OUT
@@ -67,6 +92,9 @@ the window content.
 
 Use the Read tool on `$SMALL`. The halved resolution is sufficient for
 diagnosing layout issues, waveform rendering, color problems, etc.
+
+Return a concise text summary (2–3 sentences) to the parent — do **not** include
+raw image data or tool output dumps in the response.
 
 ## Opening a Unity Editor window programmatically
 
@@ -101,3 +129,5 @@ foreach (var w in wins) if (w.GetType().Name == \"MyWindow\") { w.Close(); break
   (2× logical pixels), so halving with `sips` still gives sharp 1× images.
 - **Token cost**: Full Retina capture ≈ 300–400 KB PNG; after halving ≈ 50 KB,
   which reduces vision token usage by roughly 75%.
+- **Fork rule**: The parent agent must never call Read on the captured image
+  directly. Always spawn a fork and summarize its text response.
