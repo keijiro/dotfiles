@@ -335,6 +335,8 @@ jj edit <change-id>
 
 ### Pushing Changes
 
+**NEVER run `jj git push` unless the user has explicitly requested it.** Unlike local commits, pushing publishes changes to a shared remote — it affects other people and is not easily undone. Finishing a task, creating a bookmark, or squashing commits does not imply permission to push. When in doubt, stop and ask.
+
 When the user asks you to push changes:
 
 ```bash
@@ -348,7 +350,7 @@ jj git push -b main
 **Before pushing, ensure:**
 1. Your bookmark points to the correct commit (bookmarks don't auto-advance like git branches)
 2. The commits are refined and atomic
-3. The user has explicitly requested the push
+3. The user has explicitly requested the push — task completion is not implicit permission
 
 **IMPORTANT**: Unlike git branches, jj bookmarks do not automatically move when you create new commits. You must manually update them before pushing:
 
