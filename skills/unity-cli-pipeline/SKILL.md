@@ -22,6 +22,12 @@ unity pipeline install --project-path /path/to/MyProject
 unity pipeline install --force
 ```
 
+After installing, Unity Editor must be active (foreground) for the Pipeline package to compile and connect. Use this to bring it to the foreground:
+
+```bash
+open /Applications/Unity/Hub/Editor/<version>/Unity.app
+```
+
 ---
 
 ## command — send commands to a running editor
