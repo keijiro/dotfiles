@@ -1,6 +1,6 @@
 ---
 name: unity-cli-pipeline
-description: Use when interacting with a running Unity Editor instance — sending commands, capturing screenshots, checking editor connection status, installing the Pipeline package, or evaluating C# expressions in the editor.
+description: Use when interacting with a running Unity Editor instance — sending commands, checking editor connection status, installing the Pipeline package, or evaluating C# expressions in the editor.
 allowed-tools:
   - Bash
 ---
@@ -39,7 +39,6 @@ unity command --format json
 unity command editor_play
 unity command log_editor "Hello from CLI"
 unity command editor_status --includeMemory true
-unity command screenshot --output ./shot.png --width 1920 --height 1080
 
 # Target a specific instance
 unity command editor_play --project-path /path/to/MyProject
