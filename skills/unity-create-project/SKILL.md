@@ -5,7 +5,9 @@ allowed-tools:
   - Bash
 ---
 
-# Bare minimum project
+# New bare minimum project
+
+Use this when asked to create an empty project.
 
 The `unity` CLI recognizes a directory as a Unity project when it contains the following:
 
