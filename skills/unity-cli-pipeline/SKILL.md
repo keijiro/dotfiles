@@ -33,12 +33,12 @@ open /Applications/Unity/Hub/Editor/<version>/Unity.app
 ## command — send commands to a running editor
 
 ```bash
-unity command                              # list available commands on connected editor
+unity command                              # list available commands + parameters on connected editor
 unity command --format json
 
 unity command editor_play
-unity command log_editor "Hello from CLI"
 unity command editor_status --includeMemory true
+unity command eval --code "return Application.unityVersion;"
 
 # Target a specific instance
 unity command editor_play --project-path /path/to/MyProject
@@ -46,65 +46,33 @@ unity command editor_play --instance localhost:8765
 unity command editor_play --timeout 60
 ```
 
-### Built-in commands
+### Command conventions
+
+- The exact command set depends on the installed Pipeline package version — run `unity command` to enumerate the live set with full parameter details.
+- Destructive commands and project-settings setters require `--confirm true`; most support `--dry_run true` to preview.
+- Long-running operations (bakes, builds, target switch, packages, async tests) return immediately — poll the matching `*_status` command until `completed`.
+
+### Editor control
 
 | Command | Description |
 |---|---|
-| `editor_focus` | Bring the Unity Editor window to the foreground |
-| `editor_play` | Enter Unity Editor play mode |
-| `editor_pause` | Pause Unity Editor play mode |
-| `editor_stop` | Exit Unity Editor play mode |
-| `editor_status` | Get detailed Unity Editor status and state information |
-| `quit` | Quit the Unity Editor |
-| `recompile` | Force a script recompile (works while unfocused/minimized). Poll `recompile_status` for completion. |
-| `recompile_status` | Get the status of the last recompile: `idle` \| `triggered` \| `compiling` \| `completed` \| `up_to_date` |
-| `run_tests` | Execute Unity tests with filtering options |
-| `list_tests` | List all available tests (EditMode and/or PlayMode) without running them |
-| `cancel_tests` | Cancel running test execution |
-| `test_status` | Get status of running async test execution |
-| `eval` | Evaluate C# code dynamically using Roslyn compiler |
-| `log` | Send a log message to the editor console |
-| `reload_file` | Compile and apply in-place `[HotReload]` edits from a source file |
-| `reload_file_override` | Compile and apply hot reload file changes immediately |
-| `hotreload_status` | Get Hot Reload status |
-| `cleanup_hotreload` | Clean up Hot Reload state |
-| `runtime_status` | Get runtime / Player connection status |
-| `set_autotick` | Keep the editor ticking while unfocused (forces `EditorApplication.SignalTick`) |
-| `set_target_framerate` | Set `Application.targetFrameRate` |
-| `set_timescale` | Set `Time.timeScale` |
+| `editor_play` / `editor_pause` / `editor_stop` | Enter / pause / exit play mode |
+| `editor_status` | Detailed editor status and state |
+| `editor_focus` | Bring the editor window to the foreground |
+| `set_autotick` | Keep the editor ticking while unfocused |
+| `menu` | Execute an Editor menu item by path, or list items |
 
-#### run_tests
+### Compile / scripts / eval
 
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `mode` | String | `all` | `all`, `editor`, `playmode` |
-| `filter` | String | `""` | Test name filter (case-insensitive partial match) |
-| `filter_type` | String | `testName` | `testName`, `assembly`, `category` |
-| `include_explicit` | Boolean | `false` | Include tests marked with `[Explicit]` |
-| `async_tests` | Boolean | `false` | Return immediately; poll `test_status` for results |
-| `timeout` | Int32 | `300` | Timeout in seconds |
+| Command | Description |
+|---|---|
+| `recompile` / `recompile_status` | Force a script recompile; poll status (`idle` \| `triggered` \| `compiling` \| `completed` \| `up_to_date`) |
+| `create_script` | Create a C# script from a template (recompile before attaching) |
+| `attach_script` | Add a MonoBehaviour to a GameObject by type or script path |
+| `eval` / `eval_file` | Evaluate C# code (inline / from a .cs file) via Roslyn |
+| `reload_file` / `reload_file_override` | Compile and apply `[HotReload]` edits from a source file |
 
-#### list_tests
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `mode` | String | `all` | `all`, `editor`, `playmode` |
-
-#### set_autotick
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `enable` | Boolean | `true` | Enable or disable auto-tick |
-| `interval_ms` | Int32 | `16` | Minimum ms between ticks. `0` = every update (max rate, pegs a CPU core) |
-
-#### eval
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `code` | String | **required** | C# code to evaluate |
-| `timeout` | Int32 | `5000` | Timeout in milliseconds |
-
-**IMPORTANT:** The `code` parameter must use method-body syntax — `return` keyword and trailing semicolon are required. A bare expression without `return`/`;` causes `CS1002` compilation failure.
+**IMPORTANT — `eval`:** the `code` parameter must use method-body syntax; `return` and a trailing semicolon are required. A bare expression causes `CS1002`.
 
 ```bash
 # Correct
@@ -114,22 +82,143 @@ unity command eval --code "return UnityEngine.SceneManagement.SceneManager.GetAc
 unity command eval --code "UnityEngine.SceneManagement.SceneManager.GetActiveScene().name"
 ```
 
-#### reload_file
+### Tests
 
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `filename` | String | **required** | Source file containing `[HotReload]` methods |
-| `timeout` | Int32 | `30000` | Compilation timeout in milliseconds |
-| `assemblyDir` | String | `null` | Save compiled assemblies to disk (default: in-memory only) |
-| `pdb` | Boolean | `false` | Emit portable PDB debug symbols (unoptimized build) |
+| Command | Description |
+|---|---|
+| `run_tests` | Run tests (`mode`: all/editor/playmode; `filter`; `async_tests` for polling) |
+| `list_tests` | List EditMode/PlayMode tests without running them |
+| `test_status` / `cancel_tests` | Poll / cancel async test execution |
 
-#### reload_file_override
+### Console / logs
 
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `filename` | String | **required** | Hot reload source file to compile |
-| `timeout` | Int32 | `30000` | Compilation timeout in milliseconds |
-| `assemblyDir` | String | `null` | Save compiled assemblies to disk (default: in-memory only) |
+| Command | Description |
+|---|---|
+| `console` | Captured console output (tail, level filter, follow via cursor) |
+| `get_console_logs` | Recently captured Editor console logs (structured) |
+| `clear_console` | Clear the log buffer and the Editor console |
+
+### Capture
+
+| Command | Description |
+|---|---|
+| `screenshot` | Capture the Scene or Game view as a PNG (file path) |
+| `capture_game_view` | Render a camera to a PNG (base64) |
+| `capture_scene_view` | Render the active Scene View to a PNG (base64) |
+
+### Scenes
+
+| Command | Description |
+|---|---|
+| `create_scene` / `open_scene` / `save_scene` / `save_all` | Create / open / save scenes |
+| `list_open_scenes` | List open scenes with load/active/dirty state |
+| `set_active_scene` | Set which open scene is active |
+| `get_scene_hierarchy` | GameObject tree with instanceId + hierarchyPath handles |
+
+### GameObjects
+
+| Command | Description |
+|---|---|
+| `create_gameobject` / `create_gameobjects` | Create empty GameObjects or primitives (single / batch) |
+| `find_gameobjects` | Find by name, tag, component type, hierarchy path |
+| `delete_gameobject` / `rename_gameobject` | Delete (undoable) / rename |
+| `set_transform` / `set_parent` / `set_active` / `set_tag` / `set_layer` | Set transform, parent, active state, tag, layer |
+
+### Components / serialized data
+
+| Command | Description |
+|---|---|
+| `add_component` / `remove_component` | Add / remove a component by type name |
+| `get_component_properties` / `set_component_properties` | Read / write a component's serialized properties |
+| `get_serialized_fields` / `set_serialized_field` | Read / write serialized fields on a component or asset |
+
+### Prefabs
+
+| Command | Description |
+|---|---|
+| `create_prefab` / `create_prefab_variant` | Save a GameObject as a prefab / create a variant |
+| `instantiate_prefab` / `unpack_prefab` | Instantiate into a scene / unpack an instance |
+| `apply_prefab_overrides` / `revert_prefab_overrides` | Apply / revert instance overrides |
+| `save_prefab_contents` | Edit a prefab in an isolated stage and save (nested-safe) |
+
+### Assets / project files
+
+| Command | Description |
+|---|---|
+| `find_assets` / `search` | Find assets by type/name/label / run a Unity Search query |
+| `create_asset` / `delete_asset` | Create a ScriptableObject asset / delete an asset |
+| `move_asset` / `rename_asset` / `copy_asset` | Move (keeps GUID) / rename / copy (new GUID) |
+| `import_asset` / `create_folder` | Import an external file / create a folder |
+| `read_text_file` / `write_text_file` | Read / write a UTF-8 text file under the authoring root |
+| `get_import_settings` / `set_import_settings` | Read / write an asset's importer settings |
+| `get_selection` / `set_selection` | Read / set the Editor selection |
+| `get_authoring_root` / `set_authoring_root` | Read / set the base folder bare paths resolve against |
+
+### Shaders / materials
+
+| Command | Description |
+|---|---|
+| `list_shaders` | Discover available shaders (name, path, builtin, supported) |
+| `get_shader_properties` | Introspect a shader's declared properties |
+| `get_material_properties` / `set_material_properties` | Read / write material properties, shader, queue, keywords |
+
+### Animation / Timeline
+
+| Command | Description |
+|---|---|
+| `create_animation_clip` / `get_animation_clip` | Create / read an AnimationClip |
+| `set_animation_curve` / `remove_animation_curve` | Add-or-replace / remove a float curve binding |
+| `create_animator_controller` / `get_animator_controller` | Create / read an AnimatorController |
+| `add_animator_layer` / `add_animator_parameter` / `add_animator_state` / `add_animator_transition` | Build up an AnimatorController |
+| `create_timeline` / `get_timeline` | Create / read a TimelineAsset (requires com.unity.timeline) |
+| `add_timeline_track` / `add_timeline_clip` | Add tracks / clips to a TimelineAsset |
+
+### Baking (async — poll `*_status`)
+
+| Command | Description |
+|---|---|
+| `bake_lighting` / `lighting_bake_status` / `cancel_lighting_bake` / `clear_baked_lighting` | Lightmap bake lifecycle |
+| `get_lighting_settings` / `set_lighting_settings` | Read / write the active LightingSettings |
+| `bake_navmesh` / `bake_navmesh_surfaces` / `navmesh_bake_status` / `cancel_navmesh_bake` / `clear_navmesh` | NavMesh bake lifecycle (legacy + NavMeshSurface) |
+| `get_navmesh_settings` / `set_navmesh_settings` | Read / write legacy NavMesh bake settings |
+| `bake_occlusion_culling` / `occlusion_bake_status` / `cancel_occlusion_bake` / `clear_occlusion_culling` | Occlusion-culling bake lifecycle |
+
+### Build
+
+| Command | Description |
+|---|---|
+| `build` / `build_status` | Async Player build; poll for the full BuildReport |
+| `get_build_settings` / `set_build_settings` | Read / write EditorUserBuildSettings |
+| `add_scene_to_build` / `remove_scene_from_build` | Manage the Build Settings scene list |
+| `switch_build_target` / `switch_build_target_status` | Switch active build target (destructive, long-running) |
+| `list_build_targets` / `list_build_profiles` | List targets with install state / Build Profile assets (Unity 6) |
+
+### Packages (UPM)
+
+| Command | Description |
+|---|---|
+| `package_add` / `package_remove` | Add / remove a package (async; recompile follows) |
+| `package_list` / `package_search` | List installed/available packages / search the registry |
+| `package_resolve` / `package_status` | Re-resolve the manifest / poll the last async operation |
+
+### Project settings (setters require `confirm=true`, support `dry_run`)
+
+| Command | Description |
+|---|---|
+| `get_player_settings` / `set_player_settings` | PlayerSettings |
+| `get_quality_settings` / `set_quality_settings` | QualitySettings |
+| `get_physics_settings` / `set_physics_settings` | Physics |
+| `get_time_settings` / `set_time_settings` | Time |
+| `get_audio_settings` / `set_audio_settings` | Audio |
+| `get_graphics_settings` / `set_graphics_settings` | GraphicsSettings (render pipeline) |
+| `get_input_settings` / `set_input_settings` | Legacy Input Manager axes |
+| `get_tags_layers` / `set_tags_layers` | Tags and named layers |
+
+### Misc
+
+| Command | Description |
+|---|---|
+| `get_performance_stats` | Render, memory, and frame-timing stats (read-only) |
 
 ---
 
