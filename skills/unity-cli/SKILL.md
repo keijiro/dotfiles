@@ -51,6 +51,16 @@ unity open /path/to/MyProject
 unity open /path/to/MyProject --editor-version 6000.0.47f1
 unity 6000.0.47f1 /path/to/MyProject   # shorthand
 
+# Recommended for pipeline-driven automation: -automated suppresses modal
+# dialogs that would otherwise block unattended operation
+unity open /path/to/MyProject --editor-version 6000.0.47f1 --args -automated
+```
+
+When opening a project, prefer passing `--editor-version` explicitly with an
+installed version (check with `unity editors list`) rather than relying on
+implicit resolution.
+
+```bash
 # Create
 unity projects create MyGame --editor-version 6000.0.47f1 --template com.unity.template.3d
 unity projects create MyGame --path /path/to/projects --editor-version 6000.0.47f1
