@@ -16,11 +16,18 @@ Use `--format json` when parsing output programmatically.
 ## pipeline — manage the Pipeline package
 
 ```bash
-unity pipeline list --format json          # list reachable editors + package status
-unity pipeline install                     # install/update pipeline package (auto-detects project)
+unity pipeline list --format json          # reachable editors + installed package version (flags when newer exists)
+unity pipeline install                     # install pipeline package (auto-detects project)
 unity pipeline install --project-path /path/to/MyProject
-unity pipeline install --force
+unity pipeline install --force             # always rewrite manifest to the latest version
+unity pipeline install --package-version 1.2.3   # pin a specific version (validated against the registry)
+unity pipeline upgrade                     # update only if the registry has a newer version
+unity pipeline list-versions --format json # all published package versions, newest first
 ```
+
+With multiple editors running, `install`/`upgrade` only consider the editors that
+need the operation; pass `--project-path` in non-interactive contexts when
+several qualify.
 
 After installing, Unity Editor must be active (foreground) for the Pipeline package to compile and connect. Use this to bring it to the foreground:
 
@@ -35,15 +42,19 @@ open /Applications/Unity/Hub/Editor/<version>/Unity.app
 ```bash
 unity command                              # list available commands + parameters on connected editor
 unity command --format json
+unity list --format json                   # same discovery as a top-level command
 
 unity command editor_play
 unity command editor_status --includeMemory true
 unity command eval --code "return Application.unityVersion;"
 
-# Target a specific instance
+# Target a specific editor (editors are auto-discovered; no host:port addressing)
 unity command editor_play --project-path /path/to/MyProject
-unity command editor_play --instance localhost:8765
 unity command editor_play --timeout 60
+
+# Connect to a Unity Player runtime instead of an editor
+unity command <cmd> --runtime MyPlayer         # search by process name
+unity command <cmd> --runtime-path /path/to/port-file
 ```
 
 ### Command conventions

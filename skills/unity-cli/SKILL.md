@@ -11,6 +11,16 @@ Use `--format json` when parsing output programmatically.
 
 For less commonly used commands (`auth`, `license`, `cloud`, `templates`, `config`, `hub`, `doctor`, `env`, `cache`, `analytics`, `changelog`, `language`, `completion`, `bug`, `upgrade`, `self-uninstall`), run `unity <command> --help`.
 
+## Shell — interactive REPL
+
+```bash
+unity shell    # run many commands in one warm process (no per-command startup cost)
+```
+
+Enter commands without the `unity` prefix; leave with `exit`, `quit`, or Ctrl-D.
+Piped input (`... | unity shell`) runs every line but always exits 0 — don't
+rely on the exit code in scripts.
+
 ## Exit codes
 
 | Code | Meaning |

@@ -21,6 +21,7 @@ unity install 6000.0.47f1 --yes --accept-eula      # CI / non-interactive
 unity install 6000.0.47f1 --force                  # reinstall even if present
 unity install 6000.0.47f1 --resume                 # recover interrupted download
 unity install 6000.0.47f1 --dry-run --format json
+unity install lts                                  # latest LTS release
 ```
 
 ---
@@ -78,6 +79,14 @@ unity install-modules --editor-version 6000.0.47f1 --module android --module ios
 unity install-modules --editor-version 6000.0.47f1 --all --yes
 unity install-modules --editor-version 6000.0.47f1 --list
 unity install-modules --editor-version 6000.0.47f1 --all --accept-eula --dry-run
+unity install-modules --editor-version 6000.0.47f1 --module android --reinstall  # repair an installed module
+unity install-modules --editor-version 6000.0.47f1 --module android --force     # implies --reinstall, skips prompts
 ```
 
 `--list` and `--all` are mutually exclusive.
+
+When installing several modules, one failure no longer aborts the batch — the
+rest continue, each item is reported ✓/✗, and the exit code is non-zero if any
+failed. Failed downloads are retried automatically (`--retries <n>`, 0
+disables). On Windows, `--no-elevate` skips the UAC helper for user-writable
+install locations and CI.
