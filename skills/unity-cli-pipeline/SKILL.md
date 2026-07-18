@@ -61,6 +61,7 @@ unity command <cmd> --runtime-path /path/to/port-file
 
 - The exact command set depends on the installed Pipeline package version — run `unity command` to enumerate the live set with full parameter details.
 - Destructive commands and project-settings setters require `--confirm true`; most support `--dry_run true` to preview.
+- Array parameters (`String[]`, e.g. `options`, `scenes`) must be passed as a JSON array: `--options '["Development"]'`. A bare scalar (`--options Development`) binds to null and is **silently ignored** — no error, the command just runs without it.
 - Long-running operations (bakes, builds, target switch, packages, async tests) return immediately — poll the matching `*_status` command until `completed`.
 
 ### Editor control
