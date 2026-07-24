@@ -32,10 +32,11 @@ format = "[ $path ]($style)"
 disabled = false
 
 [directory.substitutions]
-"Documents" = " "
+"Documents" = "󰧮 "
 "Downloads" = " "
 "Music" = " "
 "Pictures" = " "
+"Projects" = " "
 
 [git_branch]
 symbol = ""
