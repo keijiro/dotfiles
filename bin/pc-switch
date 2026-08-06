@@ -1,0 +1,76 @@
+#!/bin/bash
+
+cmd="$(basename $0)"
+
+token="$(security find-generic-password -a "$USER" -s switchbot-token -w)"
+secret="$(security find-generic-password -a "$USER" -s switchbot-secret -w)"
+
+# api METHOD PATH [BODY] -- calls the SwitchBot API with a v1.1 signature
+api()
+{
+  local t nonce sign
+  t=$(( $(date +%s) * 1000 ))
+  nonce="$(uuidgen)"
+  sign="$(printf '%s%s%s' "$token" "$t" "$nonce" |
+          openssl dgst -sha256 -hmac "$secret" -binary | base64)"
+  curl -sS -X "$1" "https://api.switch-bot.com$2" \
+    -H "Authorization: $token" \
+    -H "sign: $sign" \
+    -H "nonce: $nonce" \
+    -H "t: $t" \
+    -H "Content-Type: application/json" \
+    ${3:+-d "$3"}
+}
+
+# devices [NAME] -- lists the registered devices, or resolves NAME to its ID
+devices()
+{
+  api GET /v1.1/devices | python3 -c '
+import json, sys
+
+cmd, name = sys.argv[1], sys.argv[2].lower()
+res = json.load(sys.stdin)
+
+if res.get("statusCode") != 100:
+    sys.exit("%s: API error: %s" % (cmd, res.get("message")))
+
+devices = res["body"]["deviceList"]
+
+if not name:
+    for dev in devices:
+        print("  %-16s%s" % (dev["deviceName"], dev["deviceType"]))
+    sys.exit(0)
+
+for dev in devices:
+    if dev["deviceName"].lower() == name:
+        print(dev["deviceId"])
+        sys.exit(0)
+
+sys.exit("%s: unknown device %r (available: %s)"
+         % (cmd, sys.argv[2], ", ".join(d["deviceName"] for d in devices)))
+' "$cmd" "$1"
+}
+
+if [ $# -lt 1 ]; then
+  echo "Usage: $cmd DEVICE [on|off]"
+  echo "  DEVICE  device name registered in the SwitchBot app"
+  echo "  on      short press (default)"
+  echo "  off     long press (forced shutdown)"
+  echo
+  echo "Devices:"
+  devices
+  exit 1
+fi
+
+case "${2:-on}" in
+  on)  action="turnOn"  ;;
+  off) action="turnOff" ;;
+  *) echo "$cmd: unknown operation '$2'"; exit 1 ;;
+esac
+
+device="$(devices "$1")" || exit 1
+
+api POST "/v1.1/devices/$device/commands" \
+  "{\"command\":\"$action\",\"parameter\":\"default\",\"commandType\":\"command\"}"
+
+echo
