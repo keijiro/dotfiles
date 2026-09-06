@@ -19,19 +19,13 @@ mkdir -p MyProject/Assets MyProject/ProjectSettings
 touch MyProject/ProjectSettings/ProjectVersion.txt
 ```
 
-# New project from a minimal template
+# New project from the minimal template
 
-The `github.com/keijiro/UnityProjectTemplate` repository provides the following minimal templates as subdirectories:
+The `github.com/keijiro/UnityProjectTemplate` repository is itself a single minimal template: a 3D URP project with UI Toolkit and the Input System set up.
 
-- AIA-URP3D: Minimal 3D URP project with the AI Assistant package.
-- URP-UITK: Minimal 3D URP project with the UI Toolkit package.
-- URP: Minimal 3D URP project.
-
-Use one of these templates when asked to create a new Unity project that fits one of these categories. To instantiate a template, clone the repository into a temporary directory, move the desired subdirectory to the destination, then delete the temporary directory.
+Use it when asked to create a new Unity project that fits this category. To instantiate it, shallow-clone the repository into the destination directory and remove the `.git` directory.
 
 ```bash
-tmp=$(mktemp -d)
-git clone --depth 1 https://github.com/keijiro/UnityProjectTemplate "$tmp"
-mv "$tmp/URP" MyProject
-rm -rf "$tmp"
+git clone --depth 1 https://github.com/keijiro/UnityProjectTemplate MyProject
+rm -rf MyProject/.git
 ```
