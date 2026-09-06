@@ -25,10 +25,16 @@ EOF
             android_player="$latest_android/PlaybackEngines/AndroidPlayer"
             sdk_dir="$android_player/SDK"
             ndk_dir="$android_player/NDK"
+            jdk_dir="$android_player/OpenJDK"
             [ -d "$sdk_dir" ] && export ANDROID_SDK_ROOT="$sdk_dir"
             [ -d "$ndk_dir" ] && export ANDROID_NDK_ROOT="$ndk_dir"
+            [ -d "$jdk_dir" ] && export JAVA_HOME="$jdk_dir"
             platform_tools="$sdk_dir/platform-tools"
             [ -d "$platform_tools" ] && export PATH="$PATH:$platform_tools"
+            emulator_dir="$sdk_dir/emulator"
+            [ -d "$emulator_dir" ] && export PATH="$PATH:$emulator_dir"
+            cmdline_tools=$(find "$sdk_dir/cmdline-tools" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort -V | tail -n 1)
+            [ -n "$cmdline_tools" ] && [ -d "$cmdline_tools/bin" ] && export PATH="$PATH:$cmdline_tools/bin"
         fi
     fi
 fi
