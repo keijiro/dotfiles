@@ -106,17 +106,6 @@ return {
   },
   -- }}}
 
-  -- Copilot {{{
-  {
-    "zbirenbaum/copilot.lua",
-    cmd = "Copilot",
-    event = "InsertEnter",
-    config = function ()
-      require "extensions.copilot"
-    end,
-  },
-  -- }}}
-
   -- Floaterm {{{
   {
     "nvzone/floaterm",
