@@ -9,7 +9,7 @@
 # SKILL.md file), a symlink is created in each target directory.  Symlinks that
 # point back into this repository but no longer correspond to an existing skill
 # are removed.  Anything else in the target directories (real files, unrelated
-# symlinks, the Codex ".system" directory, ...) is left untouched.
+# symlinks, agent-provided skills, ...) is left untouched.
 
 set -euo pipefail
 
@@ -22,7 +22,7 @@ SKILLS_DIR="$REPO_DIR"/skills
 # Target directories the skills get linked into.
 TARGET_DIRS=(
     "$HOME/.claude/skills"
-    "$HOME/.codex/skills"
+    "$HOME/.agents/skills"
 )
 
 # Collect the names of the skills in this repository (directories with SKILL.md).
