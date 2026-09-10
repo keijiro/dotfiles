@@ -1,2 +1,3 @@
 /bin/adb
 /bin/runpodctl
+/nvim/lazy-lock.json
