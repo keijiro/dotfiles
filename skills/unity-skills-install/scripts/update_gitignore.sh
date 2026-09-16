@@ -11,6 +11,7 @@ gitignore="$root/.gitignore"
 # Each entry is the .gitignore pattern plus the path used to test it.
 entries=(
     "/skills-lock.json:skills-lock.json"
+    "/.agents/skills/:.agents/skills/"
     "/.claude/skills/:.claude/skills/"
     "/.claude/settings.local.json:.claude/settings.local.json"
 )

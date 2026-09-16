@@ -8,37 +8,46 @@ allowed-tools:
 # Install Unity skills
 
 Installs every skill from `github.com/keijiro/unity-skills` (31 at present) as
-project-level Claude Code skills.
+project-level skills, shared by Claude Code and every agent that reads the
+agent-neutral `.agents/skills/` directory (Codex, Cursor, Copilot, Gemini CLI,
+...).
+
+`npx skills` keeps the files in `.agents/skills/<name>/` and points
+`.claude/skills/<name>` at them with a symlink, so both trees stay in sync from
+a single install.
 
 ## 1. Check the target
 
 Work at the repository root (`git rev-parse --show-toplevel`), or the current
 directory outside a git repo.
 
-`npx skills` writes to `skills-lock.json` and `.claude/skills/`. Inspect both
-first:
+`npx skills` writes to `skills-lock.json`, `.agents/skills/`, and
+`.claude/skills/`. Inspect all three first:
 
 ```bash
-ls -d skills-lock.json .claude/skills 2>/dev/null
-git ls-files --error-unmatch skills-lock.json .claude/skills 2>/dev/null
+ls -d skills-lock.json .agents/skills .claude/skills 2>/dev/null
+git ls-files --error-unmatch skills-lock.json .agents/skills .claude/skills 2>/dev/null
 ```
 
-If either path exists, **stop and ask the user**: update, leave alone, or
-reinstall. Show what is there first — `.claude/skills/` may hold hand-written
+If any path exists, **stop and ask the user**: update, leave alone, or
+reinstall. Show what is there first — those directories may hold hand-written
 skills that are unrecoverable once overwritten.
 
 ## 2. Install
 
 ```bash
-npx -y skills add keijiro/unity-skills --skill '*' --agent claude-code -y
+npx -y skills add keijiro/unity-skills --skill '*' --agent claude-code universal -y
 ```
 
-Pin `--agent claude-code`; `--all` expands to `--agent '*'` and scatters copies
-into every other agent's directory.
+`universal` is the agent entry for `.agents/skills/`, and `claude-code` adds the
+`.claude/skills/` symlinks. Pin both; `--all` expands to `--agent '*'` and
+scatters copies into every other agent's directory.
 
-Each skill lands in `.claude/skills/<name>/`, pinned by source and content hash
-in `skills-lock.json`. Restore that set later with
-`npx -y skills experimental_install`.
+Each skill lands in `.agents/skills/<name>/`, is linked from
+`.claude/skills/<name>`, and is pinned by source and content hash in
+`skills-lock.json`. `npx -y skills experimental_install` restores that set
+later, but it only refills `.agents/skills/`; re-run the command above to
+recreate the `.claude/skills/` symlinks.
 
 ## 3. Ignore the artifacts
 
@@ -46,16 +55,17 @@ in `skills-lock.json`. Restore that set later with
 scripts/update_gitignore.sh
 ```
 
-Adds `/skills-lock.json`, `/.claude/skills/`, and `/.claude/settings.local.json`
-(written in step 4). Paths git already ignores are skipped via
-`git check-ignore`, so re-running is safe.
+Adds `/skills-lock.json`, `/.agents/skills/`, `/.claude/skills/`, and
+`/.claude/settings.local.json` (written in step 4). Paths git already ignores
+are skipped via `git check-ignore`, so re-running is safe.
 
 Leave out any path step 1 found **already tracked** — a `.gitignore` entry does
 not untrack a file. Ask whether to `git rm --cached` it first.
 
 ## 4. Mark the skills `name-only` (Claude Code only)
 
-Other agents have no `skillOverrides` setting; skip this step silently there.
+Other agents have no `skillOverrides` setting; skip this step silently when the
+user only wants the `.agents/skills/` install.
 
 ```bash
 scripts/set_name_only.py
@@ -73,10 +83,10 @@ Local scope is deliberate: the skills are gitignored, so overrides in the shared
 
 ## 5. Report
 
-Give the skill count, the ignored paths, and the settings file. Overrides apply
-next session; `/skills` shows the current state.
+Give the skill count, both install directories, the ignored paths, and the
+settings file. Overrides apply next session; `/skills` shows the current state.
 
 ## Resources
 
-- `scripts/update_gitignore.sh`: Ignore the lock file, `.claude/skills/`, and `.claude/settings.local.json`.
+- `scripts/update_gitignore.sh`: Ignore the lock file, `.agents/skills/`, `.claude/skills/`, and `.claude/settings.local.json`.
 - `scripts/set_name_only.py`: Set `name-only` overrides for every locked skill.
