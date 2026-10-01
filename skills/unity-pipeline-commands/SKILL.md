@@ -57,5 +57,8 @@ Every invocation costs input and output tokens. Prefer, in order:
    Edit and rerun the file rather than retyping the call.
 3. **`eval` only for a genuine one-liner.** A multi-line `eval`, or the same
    `eval` a second time, belongs in a `run_script` file.
+   - **In a git worktree, `eval` is unavailable from the command line** (a
+     current Claude Code restriction). Write even a one-liner to a file and
+     run it with `run_script` instead.
 
 Add `--result-only` to drop the response envelope.
