@@ -24,4 +24,9 @@ unity open . --args -automated
 `unity-cli` asks for `--project-path` only when more than one Editor may be
 running. Pass it **every time** to Editor-driving commands — `unity command`,
 `list`, `job`, `mcp` — so a call never reaches the wrong Editor, whatever the
-shell's cwd or however many Editors are open:
+shell's cwd or however many Editors are open.
+
+## Wait for the Editor with `--until-ready`
+
+After `unity open`, do not poll `unity status` in a loop. Block once until the
+Editor reports ready (exits 6 after `--timeout`, default 300 s):

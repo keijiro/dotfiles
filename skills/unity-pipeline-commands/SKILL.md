@@ -7,32 +7,35 @@ allowed-tools:
 
 # Unity Pipeline commands: lookup and economy
 
-Supplements the package's own `unity-pipeline` skill. The Editor exposes ~150
-commands; the full listing is ~25 KB, so never dump it. Pass `--project-path`
-to every call (shortened to `$P` below).
+Supplements the package's own `unity-pipeline` skill. The Editor exposes ~160
+commands; the full catalog (`--detail compact|full` with no filter) is 20–350
+KB, so never ask for it. Pass `--project-path` to every call (shortened to `$P`
+below).
 
 ## Finding a command
 
 Narrow in three steps, reading only what each step needs:
 
 ```bash
-# 1. Tag tree (categories + counts) — once per session
-unity command --project-path $P --json --detail compact --group_by tag \
-  | jq -r 'def t(d): .[] | "\("  "*d)\(.tag) (\(.count))", (.children // [] | t(d+1)); .data.groups | t(0)'
+# 1. Tags with command counts — once per session
+unity command --project-path $P --tags
 
-# 2. Names in a category (a tag includes its subtags: `assets` covers `assets/import`)
-unity command --project-path $P --json --detail compact --tag assets | jq -r '.data.commands[].name'
+# 2. Commands in a tag, with descriptions and parameter names
+unity command --project-path $P --tag assets
 
-# 3. Spec of one command
+# 3. Full spec of the one command you will run
 unity command --project-path $P --json --query set_transform | jq '.data.commands[]
   | select(.name=="set_transform") | {description, parameters: [.parameters[] | {name, type, required, defaultValue, description}]}'
 ```
 
-- Tags must match exactly; a wrong one returns nothing, not an error.
-- When no tag fits, `--query <word>` matches name, description and tag. It is
-  looser, so pipe it through the same `jq` for names only.
-- `--query` is a substring match: keep the `select(.name==…)` in step 3.
-- `unity command <name> --help` shows no per-command help; step 3 is the spec.
+- Use `--tags`, not a bare `unity command`: on an older Pipeline package the
+  bare form silently dumps the whole catalog instead of the tags.
+- A wrong tag returns nothing, not an error. `--tags --query <word>` shows
+  which tags hold matching commands.
+- `unity command <name> --help` shows no per-command help, and step 2's table
+  has no types or parameter descriptions: use step 3. `--query` is a substring
+  match, so keep the `select(.name==…)`.
+- `unity commands --grep` searches the CLI's own commands, not the Editor's.
 
 ## Keep calls few
 
@@ -62,3 +65,15 @@ Every invocation costs input and output tokens. Prefer, in order:
      run it with `run_script` instead.
 
 Add `--result-only` to drop the response envelope.
+
+## Don't retry on a busy Editor
+
+`unity command <name>` already waits while the Editor is briefly unavailable
+(right after `editor_play`, during a script reload) and runs once it is ready,
+within `--timeout`. Do not wrap calls in a retry loop or add `sleep`s; raise
+`--timeout` if a reload takes longer.
+
+To wait for the Editor itself, such as after `unity open` (when plain
+`unity status` lists nothing yet), run `unity status --project-path $P
+--until-ready` once instead of polling. It returns as soon as the Editor is
+ready, or exits 6 after `--timeout` seconds (default 300).
