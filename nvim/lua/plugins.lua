@@ -5,8 +5,6 @@
   See: https://github.com/folke/lazy.nvim
 ]]
 
-require "helpers/globals"
-
 return {
 
   -- ShaderHighlight {{{
@@ -16,7 +14,7 @@ return {
   -- Bufferline {{{
   {
     "akinsho/bufferline.nvim",
-    dependencies = "kyazdani42/nvim-web-devicons",
+    dependencies = "nvim-tree/nvim-web-devicons",
     config = function ()
       require "extensions.bufferline"
     end
@@ -26,7 +24,7 @@ return {
   -- Lualine {{{
   {
     "nvim-lualine/lualine.nvim",
-    dependencies = "kyazdani42/nvim-web-devicons",
+    dependencies = "nvim-tree/nvim-web-devicons",
     config = function ()
       require "extensions.lualine"
     end
@@ -49,7 +47,7 @@ return {
   -- Telescope {{{
   {
     'nvim-telescope/telescope.nvim',
-    tag = '0.1.4',
+    tag = 'v0.2.2',
     lazy = false,
     dependencies = {
       'nvim-telescope/telescope-ui-select.nvim',
@@ -74,6 +72,7 @@ return {
   -- TreeSitter {{{
   {
     "nvim-treesitter/nvim-treesitter",
+    branch = "main",
     lazy = false,
     build = ":TSUpdate",
     config = function()

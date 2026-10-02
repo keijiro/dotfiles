@@ -1,7 +1,6 @@
-require "helpers/globals"
-require "helpers/keyboard"
+local nm = require("helpers.keyboard").nm
 
-g.mapleader = ' '                                                                 -- Use Space, like key for alternative hotkeys
+vim.g.mapleader = ' '                                                                 -- Use Space, like key for alternative hotkeys
 
 -- Buffers {{{
 nm('<tab>', ':bn<CR>')
@@ -13,11 +12,10 @@ vim.cmd("tnoremap <Esc> <C-\\><C-n>")
 -- }}}
 
 -- Floaterm {{{
-nm('<leader>t', '<cmd>FloatermToggle<CR>')                                    -- Show all buffers
+nm('<leader>t', '<cmd>FloatermToggle<CR>')                                    -- Toggle floating terminal
 -- }}}
 
 -- Telescope {{{
-nm('gd', '<cmd>Telescope lsp_definitions<CR>')                            -- Goto declaration
 nm('<leader>p', '<cmd>Telescope resume<CR>')
 nm('<leader>O', '<cmd>Telescope git_files<CR>')                                  -- Search for a file in project
 nm('<leader>o', '<cmd>Telescope find_files<CR>')                                 -- Search for a file (ignoring git-ignore)
