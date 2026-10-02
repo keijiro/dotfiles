@@ -1,32 +1,23 @@
 --[[
   File: treesitter.lua
   Description: Configuration of tree-sitter
-  See: https://github.com/tree-sitter/tree-sitter
+  See: https://github.com/nvim-treesitter/nvim-treesitter
 ]]
-require'nvim-treesitter'.setup {
+local treesitter = require("nvim-treesitter")
 
-  -- Needed parsers
-  ensure_installed = {
-    "lua",
-    "typescript",
-    "javascript",
-    "go",
-    "python",
-  },
-
-  -- Install all parsers synchronously
-  sync_install = false,
-
-  -- Highlighting
-  highlight = {
-    -- Enabling highlight for all files
-    enable = true,
-    disable = {},
-  },
-
-  indent = {
-    -- Disabling indentation for all files
-    enable = false,
-    disable = {},
-  }
+-- Needed parsers (no-op when already installed; requires tree-sitter-cli)
+treesitter.install {
+  "lua",
+  "typescript",
+  "javascript",
+  "go",
+  "python",
 }
+
+-- Highlighting: enable for every filetype that has an available parser
+vim.api.nvim_create_autocmd("FileType", {
+  group = vim.api.nvim_create_augroup("dotfiles_treesitter", { clear = true }),
+  callback = function(args)
+    pcall(vim.treesitter.start, args.buf)
+  end,
+})

@@ -36,7 +36,6 @@ return {
   -- Neo Tree {{{
   {
     "nvim-neo-tree/neo-tree.nvim",
-    branch = "v2.x",
     dependencies = {
       "nvim-lua/plenary.nvim",
       "MunifTanjim/nui.nvim",
@@ -55,7 +54,6 @@ return {
     dependencies = {
       'nvim-telescope/telescope-ui-select.nvim',
       "nvim-lua/plenary.nvim",
-      "ahmedkhalf/project.nvim",
     },
     config = function()
       require "extensions.telescope"
@@ -78,7 +76,6 @@ return {
     "nvim-treesitter/nvim-treesitter",
     lazy = false,
     build = ":TSUpdate",
-    event = { "BufReadPost", "BufNewFile" },
     config = function()
       require "extensions.treesitter"
     end

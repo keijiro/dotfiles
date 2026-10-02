@@ -29,7 +29,7 @@ nm('<leader>a', '<cmd>Telescope<CR>')                                           
 -- }}}
 
 -- Neo Tree {{{
-nm('<leader>v', '<cmd>NeoTreeFocusToggle<CR>')                                        -- Toggle file explorer
+nm('<leader>v', '<cmd>Neotree toggle<CR>')                                             -- Toggle file explorer
 -- }}}
 
 -- Prose Mode {{{

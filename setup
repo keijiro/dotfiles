@@ -47,13 +47,28 @@ install_neovim_appimage() {
     sudo mv "$tmp_file" /usr/local/bin/nvim
 }
 
+install_tree_sitter_cli() {
+    if command -v tree-sitter >/dev/null 2>&1; then
+        echo "tree-sitter is already installed."
+        return
+    fi
+
+    ts_url="https://github.com/tree-sitter/tree-sitter/releases/latest/download/tree-sitter-linux-x64.gz"
+    tmp_file=$(mktemp /tmp/tree-sitter.XXXXXX)
+    curl -L "$ts_url" | gunzip > "$tmp_file"
+    chmod +x "$tmp_file"
+    sudo mv "$tmp_file" /usr/local/bin/tree-sitter
+}
+
 if [ $is_linux ]; then
+    install_apt build-essential
     install_apt curl
     install_apt git-lfs
     install_apt ripgrep
     install_apt zsh
 
     install_neovim_appimage
+    install_tree_sitter_cli
 
     antidote_url="https://github.com/mattmc3/antidote.git"
     [ -e ~/.antidote ] || git clone --depth=1 "$antidote_url" ~/.antidote
@@ -99,6 +114,7 @@ if [ $is_macos ]; then
     install_brew neovim
     install_brew ripgrep
     install_brew starship
+    install_brew tree-sitter-cli
 
     brew tap dmmulroy/tap
     install_brew jj-starship
