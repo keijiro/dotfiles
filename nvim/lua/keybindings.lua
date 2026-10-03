@@ -30,6 +30,10 @@ nm('<leader>a', '<cmd>Telescope<CR>')                                           
 nm('<leader>v', '<cmd>Neotree toggle<CR>')                                             -- Toggle file explorer
 -- }}}
 
+-- Notes {{{
+nm('<leader>n', '<cmd>Notes<CR>')                                                -- Open notes tab
+-- }}}
+
 -- Prose Mode {{{
 nm('<leader>z', '<cmd>ProseMode<CR>')                                            -- Toggle prose mode (wrap + visual-line + 80col centering)
 -- }}}

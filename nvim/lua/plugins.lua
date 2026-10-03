@@ -112,6 +112,16 @@ return {
   },
   -- }}}
 
+  -- Notes {{{
+  {
+    "lgick/notes.nvim",
+    cmd = "Notes",
+    config = function ()
+      require "extensions.notes"
+    end
+  },
+  -- }}}
+
   -- No Neck Pain {{{
   {
     "shortcuts/no-neck-pain.nvim",

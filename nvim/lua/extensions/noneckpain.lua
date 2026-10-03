@@ -10,8 +10,18 @@ require("no-neck-pain").setup({
   width = 80,
 })
 
+local M = {}
+
+-- The public disable() is debounced; call the internal one so the side
+-- buffers are gone before the caller changes the layout.
+function M.disable_centering()
+  if require("no-neck-pain.state"):is_active_tab_registered() then
+    require("no-neck-pain.main").disable("prose")
+  end
+end
+
 -- ProseMode: toggle soft wrap + visual-line movement + centered 80 columns {{{
-local function enable_prose(buf)
+function M.enable_prose(buf)
   -- Remember the current wrap so we can restore it on disable
   vim.b[buf].prose_saved_wrap = vim.wo.wrap
 
@@ -28,7 +38,7 @@ local function enable_prose(buf)
   vim.b[buf].prose_mode = true
 end
 
-local function disable_prose(buf)
+function M.disable_prose(buf)
   -- Drop the buffer local visual-line mappings (back to default j/k)
   pcall(vim.keymap.del, "n", "j", { buffer = buf })
   pcall(vim.keymap.del, "n", "k", { buffer = buf })
@@ -39,7 +49,7 @@ local function disable_prose(buf)
   end
 
   -- Remove the centering
-  require("no-neck-pain").disable()
+  M.disable_centering()
 
   vim.b[buf].prose_mode = false
 end
@@ -47,9 +57,9 @@ end
 local function toggle_prose()
   local buf = vim.api.nvim_get_current_buf()
   if vim.b[buf].prose_mode then
-    disable_prose(buf)
+    M.disable_prose(buf)
   else
-    enable_prose(buf)
+    M.enable_prose(buf)
   end
 end
 
@@ -57,3 +67,5 @@ vim.api.nvim_create_user_command("ProseMode", toggle_prose, {
   desc = "Toggle prose mode (soft wrap + visual-line movement + 80 col centering)",
 })
 -- }}}
+
+return M
