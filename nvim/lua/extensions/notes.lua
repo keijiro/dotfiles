@@ -3,6 +3,19 @@ require("notes").setup{
   repo = "git@github.com:keijiro/notes.git",
 }
 
+-- Hide line numbers and wrap per character in the editor window {{{
+local open_in_edit = require("notes.ui").open_in_edit
+require("notes.ui").open_in_edit = function(path)
+  open_in_edit(path)
+  local st = require("notes").state
+  if st.edit_win and vim.api.nvim_win_is_valid(st.edit_win) then
+    vim.wo[st.edit_win].number = false
+    vim.wo[st.edit_win].relativenumber = false
+    vim.wo[st.edit_win].linebreak = false
+  end
+end
+-- }}}
+
 -- Enable ProseMode while the Folders/Notes panels are hidden {{{
 local ui = require("notes.ui")
 local prose = require("extensions.noneckpain")
