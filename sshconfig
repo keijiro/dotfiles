@@ -3,6 +3,9 @@ Host github.com
   User git
   IdentityFile ~/.ssh/id_ed25519
   IdentitiesOnly yes
+  ControlMaster auto
+  ControlPath ~/.ssh/cm-%C
+  ControlPersist 10m
 
 Host github-unity
   HostName github.com
