@@ -60,3 +60,24 @@ ui.close = function()
   close()
 end
 -- }}}
+
+-- Quit nvim itself when the notes tab is closed with the close key {{{
+local notes = require("notes")
+local close_interactive = notes.close_interactive
+notes.close_interactive = function()
+  local git = require("notes.git")
+  local idle = false
+  git._on_idle = function() idle = true end
+  close_interactive()
+  if notes.is_open() then
+    -- Canceled at the save prompt
+    git._on_idle = nil
+    return
+  end
+  -- Wait for the async pull/push chain to finish before quitting
+  vim.api.nvim_echo({ { "Notes: syncing..." } }, false, {})
+  vim.wait(10000, function() return idle end, 50)
+  git._on_idle = nil
+  vim.cmd("confirm qall")
+end
+-- }}}
