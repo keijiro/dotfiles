@@ -67,6 +67,20 @@ opt.wildmenu = true
 opt.wildmode = "longest:full,full"
 -- }}}
 
+-- IME Preedit {{{
+-- kitty draws the IME preedit text with the last SGR attributes left by
+-- nvim (often a dark statusline color), so reset them after every redraw.
+-- The reset is scheduled from on_start because on_end is skipped on
+-- statusline-only redraws and runs before some parts (signs etc.) are drawn.
+if vim.api.nvim_ui_send then
+  vim.api.nvim_set_decoration_provider(vim.api.nvim_create_namespace("ime_sgr_reset"), {
+    on_start = function()
+      vim.schedule(function() vim.api.nvim_ui_send("\27[m") end)
+    end,
+  })
+end
+-- }}}
+
 -- Default Plugins {{{
 local disabled_built_ins = {
   "netrw",
