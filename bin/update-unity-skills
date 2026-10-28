@@ -1,0 +1,28 @@
+#!/bin/sh
+
+set -eu
+
+cmd=$(basename "$0")
+
+if [ $# -gt 1 ]; then
+  echo "Usage: $cmd [PROJECT_DIR]"
+  exit 1
+fi
+
+repo_url="https://github.com/Unity-Technologies/skills/archive/refs/heads/main.tar.gz"
+target_dir=${1:-.}
+skills_dir="$target_dir/.claude/skills"
+
+tmp_dir=$(mktemp -d)
+trap 'rm -rf "$tmp_dir"' EXIT
+
+curl -fsSL "$repo_url" | tar -xz -C "$tmp_dir" --strip-components=1 "skills-main/skills"
+
+mkdir -p "$skills_dir"
+
+for src in "$tmp_dir/skills"/*/; do
+  name=$(basename "$src")
+  rm -rf "${skills_dir:?}/$name"
+  cp -R "$src" "$skills_dir/$name"
+  echo "Updated: $name"
+done
