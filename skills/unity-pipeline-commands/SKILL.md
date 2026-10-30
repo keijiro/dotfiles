@@ -7,73 +7,66 @@ allowed-tools:
 
 # Unity Pipeline commands: lookup and economy
 
-Supplements the package's own `unity-pipeline` skill. The Editor exposes ~160
-commands; the full catalog (`--detail compact|full` with no filter) is 20–350
-KB, so never ask for it. Pass `--project-path` to every call (shortened to `$P`
-below).
+Supplements the package's own `unity-pipeline` skill and the `unity-cli`
+skill; general command discovery (`--query`, `--tag`, `--obsolete-command-names`),
+`--result-only` and the built-in wait on a busy Editor are covered there. Pass
+`--project-path` to every call (shortened to `$P` below; see
+`unity-cli-conventions`).
+
+The old flat command names (`create_gameobject`, `eval`, `editor_play`, …)
+fail with `REMOTE_COMMAND_NOT_FOUND` on a current package, also inside a
+`job batch`; the error names the replacement.
 
 ## Finding a command
 
-Narrow in three steps, reading only what each step needs:
+The Editor exposes ~170 commands, and the full catalog (`--detail compact|full`
+with no filter) is 20–350 KB. `unity-cli` calls `--detail full` the
+authoritative catalog, but never ask for it: narrow in three steps instead,
+reading only what each step needs.
 
 ```bash
-# 1. Tags with command counts — once per session
-unity command --project-path $P --tags
+# 1. Groups with command counts — once per session
+unity command --project-path $P
 
-# 2. Commands in a tag, with descriptions and parameter names
-unity command --project-path $P --tag assets
+# 2. Commands in a group, with descriptions and parameter names
+unity command gameobject --project-path $P
 
 # 3. Full spec of the one command you will run
-unity command --project-path $P --json --query set_transform | jq '.data.commands[]
-  | select(.name=="set_transform") | {description, parameters: [.parameters[] | {name, type, required, defaultValue, description}]}'
+unity command gameobject --project-path $P --json | jq '.data.commands[]
+  | select(.command=="gameobject set_transform") | {description, parameters: [.parameters[] | {name, type, required, defaultValue, description}]}'
 ```
 
-- Use `--tags`, not a bare `unity command`: on an older Pipeline package the
-  bare form silently dumps the whole catalog instead of the tags.
-- A wrong tag returns nothing, not an error. `--tags --query <word>` shows
-  which tags hold matching commands.
+- An unknown group in step 2 fails with exit 13, but a wrong `--tag` returns
+  nothing, not an error.
 - `unity command <name> --help` shows no per-command help, and step 2's table
-  has no types or parameter descriptions: use step 3. `--query` is a substring
-  match, so keep the `select(.name==…)`.
-- `unity commands --grep` searches the CLI's own commands, not the Editor's.
+  has no types or parameter descriptions: use step 3. In the JSON, `.command`
+  is the full name and `.name` only the action.
 
 ## Keep calls few
 
 Every invocation costs input and output tokens. Prefer, in order:
 
-1. **One `batch` for several commands.** Later ops refer to earlier results
+1. **One `job batch` for several commands.** Later ops refer to earlier results
    with `$<id>.<path>`; `result_fields` trims what comes back.
    ```bash
-   unity command batch --project-path $P --result-only \
-     --operations '[{"id":"a","command":"create_gameobject","params":{"name":"Spawner"}},
-                    {"command":"set_transform","params":{"target":"$a.instanceId","position":[0,1,0]}}]' \
+   unity command job batch --project-path $P --result-only \
+     --operations '[{"id":"a","command":"gameobject create","params":{"name":"Spawner"}},
+                    {"command":"gameobject set_transform","params":{"target":"$a.instanceId","position":[0,1,0]}}]' \
      --result_fields '{"a":["instanceId"]}'
    ```
    - Transactional by default (one Undo step, all-or-nothing). It rejects
      asset, file and settings writes: pass `--transactional false` for those.
-   - Not batchable: `build`, `package_*`, play/stop/pause, `recompile`,
-     `eval`, `run_script`, `menu`, `open_scene`/`create_scene`, tests,
-     nested `batch`. `--dry_run true` checks a batch without running it.
-2. **A script for anything reusable.** Put C# in a file outside `Assets/`
-   (e.g. `AgentScripts/`) and run it with `run_script --file … --entry …`;
-   store batches you repeat as JSON and pass `--operations "$(cat ops.json)"`.
-   Edit and rerun the file rather than retyping the call.
-3. **`eval` only for a genuine one-liner.** A multi-line `eval`, or the same
-   `eval` a second time, belongs in a `run_script` file.
-   - **In a git worktree, `eval` is unavailable from the command line** (a
-     current Claude Code restriction). Write even a one-liner to a file and
-     run it with `run_script` instead.
-
-Add `--result-only` to drop the response envelope.
-
-## Don't retry on a busy Editor
-
-`unity command <name>` already waits while the Editor is briefly unavailable
-(right after `editor_play`, during a script reload) and runs once it is ready,
-within `--timeout`. Do not wrap calls in a retry loop or add `sleep`s; raise
-`--timeout` if a reload takes longer.
-
-To wait for the Editor itself, such as after `unity open` (when plain
-`unity status` lists nothing yet), run `unity status --project-path $P
---until-ready` once instead of polling. It returns as soon as the Editor is
-ready, or exits 6 after `--timeout` seconds (default 300).
+   - `--timeout` (seconds, default 60) bounds the whole batch; when it runs
+     out the rest is skipped and a transactional batch rolls back.
+   - Not batchable: `build run`, `build.target switch`, `package *`,
+     `editor.playmode start|stop|pause`, `script recompile`, `script eval`,
+     `script eval_file`, `script run`, `editor invoke_menu`,
+     `scene open|create`, `test run|list`, runtime-only commands, nested
+     `job batch`. `--dry_run true` checks a batch without running it.
+   - Store batches you repeat as JSON and pass `--operations "$(cat ops.json)"`.
+2. **A `script run` file for anything reusable**, as `unity-pipeline`
+   describes.
+3. **`script eval` only for a genuine one-liner.**
+   - **In a git worktree, `script eval` is unavailable from the command line**
+     (a current Claude Code restriction). Write even a one-liner to a file and
+     run it with `script run` instead.

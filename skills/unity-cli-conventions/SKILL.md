@@ -8,7 +8,8 @@ allowed-tools:
 # Unity CLI conventions
 
 Supplements the `unity-cli` skill with two rules for every automated `unity`
-invocation. Where the two differ, follow these.
+invocation. Where the two differ, follow these. For waiting on the Editor
+(`--until-ready`, exit codes) and how `--project-path` matches, see `unity-cli`.
 
 ## Pass `-automated` when opening Unity
 
@@ -16,17 +17,13 @@ When Unity is launched by an agent rather than a person, pass `-automated` to
 the Editor:
 
 ```bash
-unity open . --args -automated
+unity open "$P" --args -automated --until-ready
 ```
 
 ## Always pass `--project-path`
 
 `unity-cli` asks for `--project-path` only when more than one Editor may be
-running. Pass it **every time** to Editor-driving commands — `unity command`,
-`list`, `job`, `mcp` — so a call never reaches the wrong Editor, whatever the
-shell's cwd or however many Editors are open.
-
-## Wait for the Editor with `--until-ready`
-
-After `unity open`, do not poll `unity status` in a loop. Block once until the
-Editor reports ready (exits 6 after `--timeout`, default 300 s):
+running. Pass it **every time**, with the project's full path, to
+Editor-driving commands — `unity command`, `status`, `recompile`, `job`, `mcp`,
+`pipeline` — so a call never reaches the wrong Editor, whatever the shell's cwd
+or however many Editors are open. Prefer the flag over `UNITY_PROJECT_PATH`.
