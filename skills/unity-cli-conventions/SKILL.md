@@ -25,5 +25,10 @@ unity open "$P" --args -automated --until-ready
 `unity-cli` asks for `--project-path` only when more than one Editor may be
 running. Pass it **every time**, with the project's full path, to
 Editor-driving commands — `unity command`, `status`, `recompile`, `job`, `mcp`,
-`pipeline` — so a call never reaches the wrong Editor, whatever the shell's cwd
-or however many Editors are open. Prefer the flag over `UNITY_PROJECT_PATH`.
+`pipeline`, `close` — so a call never reaches the wrong Editor, whatever the
+shell's cwd or however many Editors are open. Prefer the flag over
+`UNITY_PROJECT_PATH`: `close` ignores the variable, and `unity-cli` disagrees
+with itself on whether `recompile` reads it.
+
+`unity commands --grep` cannot be pinned to one Editor. To search a project's
+Pipeline commands, use `unity command --query <term> --project-path "$P"`.
