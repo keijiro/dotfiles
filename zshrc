@@ -1,9 +1,16 @@
 # PATH directories
 export PATH="$PATH:$HOME/.dotfiles/bin"
-[ -d /opt/homebrew/bin ] && export PATH="$PATH:/opt/homebrew/bin"
-[ -d /snap/bin         ] && export PATH="$PATH:/snap/bin"
-[ -d "$HOME/.local/bin" ] && export PATH="$HOME/.local/bin:$PATH"
+[ -d /opt/homebrew/bin  ] && export PATH="$PATH:/opt/homebrew/bin"
+[ -d /snap/bin          ] && export PATH="$PATH:/snap/bin"
+[ -d "$HOME/.local/bin" ] && export PATH="$PATH:$HOME/.local/bin"
+
 source "$HOME/.dotfiles/unity-android.zsh"
+
+if command -v brew >/dev/null 2>&1; then
+    RUSTUP_PREFIX="$(brew --prefix --installed rustup 2>/dev/null)" &&
+        export PATH="$PATH:$RUSTUP_PREFIX/bin"
+    unset RUSTUP_PREFIX
+fi
 
 # Prefer Vim
 export EDITOR=nvim
